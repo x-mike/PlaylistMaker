@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_screen">22sp</dimen>
+    <dimen name="menu_text">16sp</dimen>
+    <dimen name="main_menu_text">22sp</dimen>
+    <dimen name="radius_button">16dp</dimen>
+    <dimen name="margin_top_button">16dp</dimen>
+    <dimen name="icon_padding_main">10dp</dimen>
+    <dimen name="icon_padding">28dp</dimen>
+    <dimen name="before_menu_item">16dp</dimen>
+    <dimen name="after_menu_item">16dp</dimen>
+    <dimen name="height_button">61dp</dimen>
+</resources>
