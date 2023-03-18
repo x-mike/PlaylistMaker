@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_button">
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="61dp"
+        android:layout_height="@dimen/height_button"
+        android:backgroundTint="@color/white"
+        android:layout_gravity="start"
+        android:stateListAnimator="@null"
+        android:foreground="?attr/selectableItemBackground"
+        app:icon="@drawable/backarrow_24x24"
+        app:iconTint="@color/black_m"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/height_button"
+        android:text="@string/button_settings"
+        android:textColor="@color/black_m"
+        android:textSize="@dimen/title_screen"
+        android:textStyle="bold"
+        android:layout_gravity="start"
+        android:gravity="fill"
+        />
+
+</LinearLayout>
+
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_button"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif"
+        android:paddingStart="@dimen/before_menu_item"
+        android:paddingEnd="8dp"
+        android:text="@string/themes"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_button"
+        android:backgroundTint="@color/white"
+        android:gravity="fill"
+        android:letterSpacing="0"
+        android:paddingStart="@dimen/before_menu_item"
+        android:paddingEnd="@dimen/after_menu_item"
+        android:stateListAnimator="@null"
+        android:text="@string/app_share"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text"
+        app:fontFamily="sans-serif"
+        app:icon="@drawable/links_24x24"
+        app:iconGravity="end"
+        app:iconTint="@color/grey_i"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_button"
+        android:backgroundTint="@color/white"
+        android:gravity="fill"
+        android:letterSpacing="0"
+        android:paddingStart="@dimen/before_menu_item"
+        android:paddingEnd="@dimen/after_menu_item"
+        android:stateListAnimator="@null"
+        android:text="@string/support_write"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text"
+        app:fontFamily="sans-serif"
+        app:icon="@drawable/support_24x24"
+        app:iconGravity="end"
+        app:iconTint="@color/grey_i"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_button"
+        android:backgroundTint="@color/white"
+        android:gravity="fill"
+        android:letterSpacing="0"
+        android:paddingStart="@dimen/before_menu_item"
+        android:paddingEnd="@dimen/after_menu_item"
+        android:stateListAnimator="@null"
+        android:text="@string/agreement"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="@dimen/menu_text"
+        app:fontFamily="sans-serif"
+        app:icon="@drawable/arrow_24x24"
+        app:iconGravity="end"
+        app:iconTint="@color/grey_i"/>
+
+</LinearLayout>
