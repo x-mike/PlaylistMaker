@@ -7,7 +7,10 @@
     <dimen name="margin_top_button">16dp</dimen>
     <dimen name="icon_padding_main">10dp</dimen>
     <dimen name="icon_padding">28dp</dimen>
-    <dimen name="before_menu_item">16dp</dimen>
-    <dimen name="after_menu_item">16dp</dimen>
+    <dimen name="before_item">16dp</dimen>
+    <dimen name="after_item">16dp</dimen>
     <dimen name="height_button">61dp</dimen>
+    <dimen name="weight_menu_text">400</dimen>
+    <dimen name="weight_main_menu_text">500</dimen>
+    <dimen name="padding_item">13dp</dimen>
 </resources>
