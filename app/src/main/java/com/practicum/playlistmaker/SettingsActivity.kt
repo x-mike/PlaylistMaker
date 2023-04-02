@@ -36,6 +36,7 @@ class SettingsActivity : AppCompatActivity() {
         val buttonSupportWrite = findViewById<Button>(R.id.support_write)
 
         buttonSupportWrite.setOnClickListener {
+
             val intentSupportWrite = Intent(Intent.ACTION_SENDTO,Uri.parse(getString(R.string.mailto)))
 
             intentSupportWrite.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.developer_mail)))
