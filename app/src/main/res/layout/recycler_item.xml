@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/RootLayoutTracksRecycler">
+
+    <ImageView
+        android:id="@+id/recycler_item_image"
+        style="@style/ImageInTracksRecycler"
+        tools:src="@drawable/placeholder_45x45" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/TrackNameInTracksRecycler"
+            android:id="@+id/trackNameInRecycler"
+            tools:text="Here Comes The Sun (Remastered)" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/ArtistNameInTracksRecycler"
+                android:id="@+id/artistNameInRecycler"
+                tools:text="The Beatles"
+                android:textSize="@dimen/low_text" />
+
+            <ImageView style="@style/ImagePointInTracksRecycler" />
+
+            <TextView
+                style="@style/TimeInTracksRecycler"
+                android:id="@+id/timeInRecycler"
+                tools:text="4:01" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView style="@style/ArrowInTracksRecycler"/>
+
+</LinearLayout>

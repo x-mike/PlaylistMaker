@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="title_screen">22sp</dimen>
-    <dimen name="menu_text">16sp</dimen>
-    <dimen name="main_menu_text">22sp</dimen>
+    <dimen name="medium_text">16sp</dimen>
+    <dimen name="high_text">22sp</dimen>
+    <dimen name="low_text">11sp</dimen>
     <dimen name="radius_button">16dp</dimen>
     <dimen name="margin_top_button">16dp</dimen>
     <dimen name="icon_padding_main">10dp</dimen>
@@ -10,7 +10,18 @@
     <dimen name="before_item">16dp</dimen>
     <dimen name="after_item">16dp</dimen>
     <dimen name="height_button">61dp</dimen>
-    <dimen name="weight_menu_text">400</dimen>
-    <dimen name="weight_main_menu_text">500</dimen>
+    <dimen name="weight_medium_text">400</dimen>
+    <dimen name="weight_high_text">500</dimen>
     <dimen name="padding_item">13dp</dimen>
+    <dimen name="high_view_medium">61dp</dimen>
+    <dimen name="item_paddingTop_VeryLow">1dp</dimen>
+    <dimen name="item_paddingTop_low">14dp</dimen>
+    <dimen name="item_margin_low">8dp</dimen>
+    <dimen name="item_marginEnd_low">12dp</dimen>
+    <dimen name="item_marginStart_low">13dp</dimen>
+    <dimen name="item_marginTop_medium">18dp</dimen>
+    <dimen name="item_marginTop_high">24dp</dimen>
+    <dimen name="icon_medium_size">45dp</dimen>
+    <dimen name="icon_small_size">24dp</dimen>
+
 </resources>
