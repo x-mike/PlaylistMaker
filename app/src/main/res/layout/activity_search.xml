@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/MenuLinearLayout">
 
     <androidx.appcompat.widget.Toolbar style="@style/StyleToolbar">
 
         <Button
             android:id="@+id/back_button"
-            style="@style/StyleBackButton" />
+            style="@style/StyleBackButton"/>
 
         <TextView
             style="@style/StyleToolbarTitle"
@@ -20,21 +20,55 @@
         android:background="@drawable/shape_search">
 
         <EditText
-            android:id="@+id/searchField"
+            android:id="@+id/search_field"
             style="@style/StyleEditTextField"
             android:drawableStart="@drawable/search_14x14"
             android:drawablePadding="9dp"
             android:drawableTint="@color/grey_i"
-            android:hint="@string/search" />
+            android:hint="@string/search"
+            />
 
         <ImageView
-            android:id="@+id/icSearchFieldErase"
+            android:id="@+id/ic_search_field_remove_text"
             style="@style/StyleEraseTextIcon" />
 
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_tracks"
-        style="@style/TracksRecycler"/>
+        style="@style/TracksRecycler"
+        tools:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/no_found_linearLayout"
+        style="@style/LinearLayoutErrorsSearch"
+        tools:visibility="gone">
+
+        <ImageView
+            style="@style/NoFoundImageView"/>
+
+        <TextView
+            style="@style/PlaceholderTextSearchActivity"
+            android:text="@string/not_found"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/no_connect_linearLayout"
+        style="@style/LinearLayoutErrorsSearch">
+
+        <ImageView
+            style="@style/NoConnectImageView"/>
+
+        <TextView
+            style="@style/PlaceholderTextSearchActivity"
+            android:text="@string/errors_connecting"/>
+
+        <Button
+            android:id="@+id/update_connect"
+            style="@style/ButtonMedium"
+            android:text="@string/button_update"/>
+
+    </LinearLayout>
 
 </LinearLayout>
