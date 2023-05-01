@@ -11,7 +11,7 @@
     <dimen name="icon_padding_main">10dp</dimen>
     <dimen name="button_width_medium">91dp</dimen>
     <dimen name="button_height_medium">50dp</dimen>
-    <dimen name="padding_low">6dp</dimen>
+    <dimen name="padding_low">14dp</dimen>
     <dimen name="icon_padding">28dp</dimen>
     <dimen name="before_item">16dp</dimen>
     <dimen name="after_item">16dp</dimen>
@@ -30,6 +30,9 @@
     <dimen name="item_marginTop_medium">18dp</dimen>
     <dimen name="item_marginTop_high">24dp</dimen>
     <dimen name="item_marginTop_veryHigh">113dp</dimen>
+    <dimen name="item_marginTop_history_search">26dp</dimen>
+    <dimen name="item_marginBottom_low">15dp</dimen>
+    <dimen name="marginTop_recycler_history_search">16dp</dimen>
     <dimen name="text_placeholder_marginTop">20dp</dimen>
     <dimen name="icon_medium_size">45dp</dimen>
     <dimen name="icon_small_size">24dp</dimen>

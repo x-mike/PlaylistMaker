@@ -19,6 +19,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_button"
         style="@style/StyleSwitch"
         android:layout_marginTop="20dp"
         android:text="@string/themes"/>
