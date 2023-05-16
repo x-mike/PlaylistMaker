@@ -213,7 +213,7 @@
 
     <style name="LinearLayoutSearch">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">center_horizontal</item>
     </style>
@@ -270,5 +270,59 @@
         <item name="android:textColor">@color/black_m</item>
         <item name="android:layout_marginTop">@dimen/item_marginTop_history_search</item>
     </style>
+
+    <style name="PlayerGuideLine">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="DescriptionTrackPlayer">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/line_of_text_low</item>
+        <item name="android:textColor">@color/grey_i</item>
+    </style>
+
+    <style name="CurrentDescriptionTrackPlayer">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/line_of_text_low</item>
+        <item name="android:textColor">@color/black_m</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="layout_constraintHorizontal_bias">1.0</item>
+        <item name="layout_constrainedWidth">true</item>
+    </style>
+
+    <style name="PlayerTextLine">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textColor">@color/black_m</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="PlayerConstraintMain">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="PlayerButtonsAdd">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_top_height</item>
+    </style>
+
+    <style name="PlayerButtonPlay">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/button_play</item>
+        <item name="android:layout_marginTop">38dp</item>
+    </style>
+
 
 </resources>

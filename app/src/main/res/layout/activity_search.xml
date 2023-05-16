@@ -70,10 +70,6 @@
 
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/item_marginTop_high">
 
         <LinearLayout
             android:id="@+id/history_search_LinearLayout"
@@ -83,22 +79,20 @@
             <TextView
                 android:id="@+id/your_history_search"
                 style="@style/TitleHistorySearch"
-                android:text="@string/you_searched" />
+                android:text="@string/you_searched"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_history_search"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
 
-
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/del_history_search"
                 style="@style/ButtonMedium"
-                android:text="@string/button_del_history_search" />
-
+                android:text="@string/button_del_history_search"/>
 
         </LinearLayout>
-
-    </ScrollView>
 
 </LinearLayout>
