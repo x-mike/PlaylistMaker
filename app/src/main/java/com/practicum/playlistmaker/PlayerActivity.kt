@@ -14,6 +14,10 @@ import java.util.*
 
 class PlayerActivity : AppCompatActivity() {
 
+    private val startingSymbolYear = 0
+    private val endingSymbolYear = 4
+
+
     private lateinit var trackName: TextView
     private lateinit var artistName: TextView
     private lateinit var trackTimeMillis: TextView
@@ -48,8 +52,8 @@ class PlayerActivity : AppCompatActivity() {
         trackTimeMillis.text = SimpleDateFormat("mm:ss", Locale.getDefault())
             .format(dataTrack.trackTimeMillis)
 
-        collectionName.text = if(dataTrack.collectionName == null) "" else dataTrack.collectionName
-        releaseDate.text = dataTrack.releaseDate?.subSequence(0,4)
+        collectionName.text = dataTrack.collectionName.orEmpty()
+        releaseDate.text = dataTrack.releaseDate?.subSequence(startingSymbolYear,endingSymbolYear)
 
         primaryGenreName.text = dataTrack.primaryGenreName
         country.text = dataTrack.country
@@ -57,7 +61,7 @@ class PlayerActivity : AppCompatActivity() {
         Glide.with(this)
             .load(dataTrack.getCoverArtwork())
             .placeholder(R.drawable.placeholder_45x45)
-            .transform(RoundedCorners(25))
+            .transform(RoundedCorners(resources.getDimensionPixelSize(R.dimen.radius_corner_PlPoster)))
             .into(artworkUrl100)
 
         backButton.setOnClickListener {
@@ -66,4 +70,4 @@ class PlayerActivity : AppCompatActivity() {
 
     }
 
-}
+ }
