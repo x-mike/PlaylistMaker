@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 
 class SettingsActivity : AppCompatActivity() {
@@ -82,6 +83,7 @@ class SettingsActivity : AppCompatActivity() {
                 .configuration
                 .uiMode.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
         }
+    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     }
 
  }

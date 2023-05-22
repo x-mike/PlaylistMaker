@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.data.ListTracksResponse
 import com.practicum.playlistmaker.data.Track
 import com.practicum.playlistmaker.httpRequests.ItunesApi
-import com.practicum.playlistmaker.logicRecyclers.HistorySearchAdapter
 import com.practicum.playlistmaker.logicRecyclers.TracksAdapter
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -71,7 +70,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historySearchLinear: LinearLayout
     private lateinit var noConnectLinear: LinearLayout
     private lateinit var searchHistory: SearchHistory
-    private lateinit var historySearchAdapter: HistorySearchAdapter
+    private lateinit var historySearchAdapter: TracksAdapter
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +90,7 @@ class SearchActivity : AppCompatActivity() {
 
         searchHistory = SearchHistory(getSharedPreferences(App.SAVE_SETTINGS, MODE_PRIVATE))
         tracksAdapter = TracksAdapter(listTracks, searchHistory)
-        historySearchAdapter = HistorySearchAdapter(listSearchHistory)
+        historySearchAdapter = TracksAdapter(listSearchHistory)
 
         searchField.setText(textSearchField)
 

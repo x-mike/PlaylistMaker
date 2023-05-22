@@ -19,4 +19,14 @@
     <string name="button_update">Обновить</string>
     <string name="you_searched">Вы искали</string>
     <string name="button_del_history_search">Очистить историю</string>
+    <string name="description_poster_player">Poster for track</string>
+    <string name="description_button_add">Add track in list</string>
+    <string name="description_button_play">Play track</string>
+    <string name="description_button_heart">Add track in favorite</string>
+    <string name="description_player_duration">Длительность</string>
+    <string name="description_player_alb">Альбом</string>
+    <string name="description_player_year">Год</string>
+    <string name="description_player_genre">Жанр</string>
+    <string name="description_player_country">Страна</string>
+
 </resources>

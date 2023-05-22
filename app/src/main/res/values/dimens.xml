@@ -5,8 +5,13 @@
     <dimen name="placeholder_text">19sp</dimen>
     <dimen name="low_text">11sp</dimen>
     <dimen name="button_text_low">14sp</dimen>
+    <dimen name="line_of_text_low">13sp</dimen>
+    <dimen name="line_of_text">14sp</dimen>
     <dimen name="radius_button">16dp</dimen>
     <dimen name="radius_button_medium">54dp</dimen>
+    <dimen name="margin_top_height">54dp</dimen>
+    <dimen name="margin_top_medium">39dp</dimen>
+    <dimen name="margin_top_low">17dp</dimen>
     <dimen name="margin_top_button">16dp</dimen>
     <dimen name="icon_padding_main">10dp</dimen>
     <dimen name="button_width_medium">91dp</dimen>
