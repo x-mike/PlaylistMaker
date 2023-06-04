@@ -83,7 +83,7 @@ class SettingsActivity : AppCompatActivity() {
                 .configuration
                 .uiMode.and(Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
         }
-    AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+
     }
 
  }
