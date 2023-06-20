@@ -94,5 +94,16 @@
                 android:text="@string/button_del_history_search"/>
 
         </LinearLayout>
+    
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="@dimen/layout_size_medium"
+        android:layout_height="@dimen/layout_size_medium"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/blue"
+        android:layout_marginTop="@dimen/margin_top_veryHeight"
+        android:visibility="gone"
+        tools:visibility="visible"
+        />
 
 </LinearLayout>

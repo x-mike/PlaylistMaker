@@ -9,7 +9,8 @@ data class Track(
     var collectionName: String? =null,
     var releaseDate: String? = null,
     var primaryGenreName: String? = null,
-    var country: String? = null
+    var country: String? = null,
+    var previewUrl: String? = null
 )
 {
 
