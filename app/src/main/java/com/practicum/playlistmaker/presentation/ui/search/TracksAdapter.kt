@@ -1,12 +1,11 @@
-package com.practicum.playlistmaker.logicRecyclers
+package com.practicum.playlistmaker.presentation.ui.search
 
 import android.content.Intent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.practicum.playlistmaker.PlayerActivity
-import com.practicum.playlistmaker.SearchHistory
-import com.practicum.playlistmaker.data.Track
+import com.practicum.playlistmaker.presentation.ui.player.PlayerActivity
+import com.practicum.playlistmaker.data.SearchHistory
+import com.practicum.playlistmaker.domain.models.Track
 import android.os.Handler
 
 class TracksAdapter(private val listTrack: List<Track>,
@@ -39,7 +38,7 @@ companion object{
 
                      val intent = Intent(it.context, PlayerActivity::class.java)
 
-                     intent.putExtra("dataTrack", Gson().toJson(listTrack[position]))
+                     intent.putExtra("dataTrack", listTrack[position])
 
                      it.context.startActivity(intent)
 

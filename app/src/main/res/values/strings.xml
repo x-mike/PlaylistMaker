@@ -29,5 +29,6 @@
     <string name="description_player_genre">Жанр</string>
     <string name="description_player_country">Страна</string>
     <string name="start_time">00:00</string>
+    <string name="playback_error">Воспроизведение невозможно! Нет такого файла или каталога</string>
 
 </resources>
