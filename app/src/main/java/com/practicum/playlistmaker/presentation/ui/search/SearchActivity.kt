@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,10 +18,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.practicum.playlistmaker.data.ListTracksResponse
-import com.practicum.playlistmaker.data.Track
-import com.practicum.playlistmaker.httpRequests.ItunesApi
-import com.practicum.playlistmaker.logicRecyclers.TracksAdapter
+import com.practicum.playlistmaker.App
+import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.data.SearchHistory
+import com.practicum.playlistmaker.data.dto.ListTracksResponse
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.data.network.ItunesApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
