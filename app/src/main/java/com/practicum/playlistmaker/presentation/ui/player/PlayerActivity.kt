@@ -10,31 +10,31 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.domain.models.StatePlayer
 import com.practicum.playlistmaker.domain.models.Track
-import com.practicum.playlistmaker.presentation.api.ViewModel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
-class PlayerActivity : AppCompatActivity(), ViewModel {
+class PlayerActivity : AppCompatActivity() {
 
     companion object {
         private const val DELAY_UPDATE_TIMER_MS = 500L
     }
 
-    val playerInteractor = Creator.provideInteractorPlayerAndViewModel(this)
+    val playerInteractor = Creator.provideInteractorPlayer()
     val handler = Handler(Looper.getMainLooper())
 
     val runnableTask = object : Runnable {
         override fun run() {
 
-            if (playerInteractor.getStatePlayer() == StatePlayer.STATE_PLAYING) {
+                playerInteractor.getStatePlayer {state ->
+                    if (state == 2) {
 
-                timePlayTrack.text = SimpleDateFormat("mm:ss", Locale.getDefault())
-                    .format(playerInteractor.getCurrentPositionPlayer())
+                        timePlayTrack.text = SimpleDateFormat("mm:ss", Locale.getDefault())
+                            .format(playerInteractor.getCurrentPositionPlayer())
 
-                handler.postDelayed(this, DELAY_UPDATE_TIMER_MS)
-            }
+                        handler.postDelayed(this, DELAY_UPDATE_TIMER_MS)
+                    }
+                }
         }
     }
 
@@ -59,7 +59,12 @@ class PlayerActivity : AppCompatActivity(), ViewModel {
 
         initializingTrackData()
 
-        playerInteractor.preparePlayer(dataTrack.previewUrl ?: "")
+        //used lambda for get callback on complete listener
+            playerInteractor.preparePlayer(dataTrack.previewUrl ?: ""){
+
+        chengingDrawableButtonPlay()
+        timePlayTrack.text = getString(R.string.start_time)
+        }
 
         setListenersForPlayer()
 
@@ -75,15 +80,15 @@ class PlayerActivity : AppCompatActivity(), ViewModel {
 
     override fun onDestroy() {
         super.onDestroy()
-
-        playerInteractor.setStatePlayer(StatePlayer.STATE_DEFAULT)
+    //set state 1 - DEFAULT
+            playerInteractor.setStatePlayer(1)
         handler.removeCallbacks(runnableTask)
 
     }
 
     private fun startPlayer() {
 
-        playerInteractor.startPlayer()
+            playerInteractor.startPlayer()
 
         chengingDrawableButtonPlay()
 
@@ -91,7 +96,7 @@ class PlayerActivity : AppCompatActivity(), ViewModel {
     }
 
     private fun pausePlayer() {
-        playerInteractor.pausePlayer()
+            playerInteractor.pausePlayer()
 
         handler.removeCallbacks(runnableTask)
 
@@ -100,17 +105,19 @@ class PlayerActivity : AppCompatActivity(), ViewModel {
     }
 
     private fun playbackControl() {
+           playerInteractor.getStatePlayer {state ->
 
-        when (playerInteractor.getStatePlayer()) {
-            StatePlayer.STATE_PLAYING -> {
-                pausePlayer()
-            }
-            StatePlayer.STATE_PREPARED,
-            StatePlayer.STATE_PAUSED,
-            StatePlayer.STATE_DEFAULT -> {
-                startPlayer()
-            }
+           when (state) {
+           2 -> {
+               pausePlayer()
+           }
+           else -> {
+               startPlayer()
+           }
         }
+       }
+
+
     }
 
     private fun updateTimerTrack() {
@@ -178,28 +185,17 @@ class PlayerActivity : AppCompatActivity(), ViewModel {
         }
     }
 
-    override fun onCompletionPlay() {
-        chengingDrawableButtonPlay()
-        timePlayTrack.text = getString(R.string.start_time)
-    }
 
+    private fun chengingDrawableButtonPlay() {
+            playerInteractor.getStatePlayer(){state ->
+            if(state == 2){
+                playButton.background = getDrawable(this.resources, R.drawable.button_pause, this.theme)
+            }
+            else{
+                playButton.background = getDrawable(this.resources, R.drawable.button_play, this.theme)
+            }
 
-    fun chengingDrawableButtonPlay() {
-        if (playerInteractor.getStatePlayer() == StatePlayer.STATE_PLAYING) {
-            playButton.background = getDrawable(this.resources, R.drawable.button_stop, this.theme)
-
-        } else {
-            playButton.background = getDrawable(this.resources, R.drawable.button_play, this.theme)
         }
-    }
-
-    override fun showToast() {
-        Toast.makeText(
-            this,
-            getString(R.string.playback_error),
-            Toast.LENGTH_LONG
-        )
-            .show()
 
     }
 

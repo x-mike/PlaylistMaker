@@ -1,10 +1,8 @@
 package com.practicum.playlistmaker.domain.api
 
-import com.practicum.playlistmaker.domain.models.StatePlayer
-
 interface PlayerInteractor {
 
-    fun preparePlayer(url:String?)
+    fun preparePlayer(url:String?,onCompleteListener:()->Unit)
 
     fun startPlayer()
 
@@ -12,13 +10,10 @@ interface PlayerInteractor {
 
     fun releasePlayer()
 
-    fun getStatePlayer():StatePlayer
+    fun getStatePlayer(onStateListener: (state:Int)->Unit)
 
-    fun setStatePlayer(stPlayer: StatePlayer)
+    fun setStatePlayer(state: Int)
 
     fun getCurrentPositionPlayer (): Int
-
-    fun onCompletionPlay()
-
 
 }
