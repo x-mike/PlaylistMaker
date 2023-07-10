@@ -1,47 +1,55 @@
 package com.practicum.playlistmaker.data
 
 import android.media.MediaPlayer
-import com.practicum.playlistmaker.domain.api.MessageUiUseCase
-import com.practicum.playlistmaker.domain.api.PlayerInteractor
+import android.util.Log
 import com.practicum.playlistmaker.domain.api.PlayerRepository
-import com.practicum.playlistmaker.domain.models.StatePlayer
 import java.io.FileNotFoundException
 
-class PlayerRepositoryImpl(val messageUiUseCase: MessageUiUseCase,
-                           var playerInteractor: PlayerInteractor? = null) : PlayerRepository {
+class PlayerRepositoryImpl() : PlayerRepository {
+
+//In future will change on enum State
+    companion object {
+        const val STATE_DEFAULT = 0
+        const val STATE_PREPARED = 1
+        const val STATE_PLAYING = 2
+        const val STATE_PAUSED = 3
+    }
+
+    var statePlr = STATE_DEFAULT
 
     val mediaPlayer = MediaPlayer()
 
-    override fun preparePlayer(url: String?) {
+    override fun preparePlayer(url: String?, onCompleteListener: ()-> Unit) {
 
         try {
             mediaPlayer.setDataSource(url)
             mediaPlayer.prepareAsync()
 
             mediaPlayer.setOnPreparedListener{
-            playerInteractor!!.setStatePlayer(StatePlayer.STATE_PREPARED)
+            statePlr = STATE_PREPARED
             }
 
             mediaPlayer.setOnCompletionListener {
 
-            playerInteractor!!.setStatePlayer(StatePlayer.STATE_PREPARED)
-            playerInteractor!!.onCompletionPlay()
+            statePlr = STATE_PREPARED
+            onCompleteListener()
 
             }
         }
+        //Hardcode, replace in the future
         catch (exc:FileNotFoundException){
-               messageUiUseCase.showToastError()
+               Log.d("ErrorPlayer","Нет такого файла или каталога!")
         }
 
     }
 
     override fun startPlayer() {
-        playerInteractor!!.setStatePlayer(StatePlayer.STATE_PLAYING)
+        statePlr = STATE_PLAYING
         mediaPlayer.start()
     }
 
     override fun pausePlayer() {
-        playerInteractor!!.setStatePlayer(StatePlayer.STATE_PAUSED)
+        statePlr = STATE_PAUSED
         mediaPlayer.pause()
     }
 
@@ -51,4 +59,11 @@ class PlayerRepositoryImpl(val messageUiUseCase: MessageUiUseCase,
 
     override fun getCurrentPositionPlayer(): Int = mediaPlayer.currentPosition
 
+    override fun getStatePlayer(onStateListener: (state: Int) -> Unit) {
+       onStateListener(statePlr)
+    }
+
+    override fun setStatePlayer(state: Int) {
+        statePlr = state
+    }
 }

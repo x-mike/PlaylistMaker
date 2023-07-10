@@ -2,40 +2,34 @@ package com.practicum.playlistmaker.domain.impl
 
 import com.practicum.playlistmaker.domain.api.PlayerInteractor
 import com.practicum.playlistmaker.domain.api.PlayerRepository
-import com.practicum.playlistmaker.domain.models.StatePlayer
-import com.practicum.playlistmaker.presentation.api.ViewModel
 
-class PlayerInteractorImpl(val playerRepository: PlayerRepository, val viewModel: ViewModel) : PlayerInteractor {
-
-    private var statePlayer = StatePlayer.STATE_DEFAULT
+class PlayerInteractorImpl(val playerRepository: PlayerRepository) : PlayerInteractor {
 
 
     override fun startPlayer() {
-        playerRepository.startPlayer()
+            playerRepository.startPlayer()
     }
 
     override fun pausePlayer() {
-        playerRepository.pausePlayer()
+            playerRepository.pausePlayer()
     }
 
-    override fun preparePlayer(url: String?) {
-        playerRepository.preparePlayer(url)
+    override fun preparePlayer(url: String?,onCompleteListener:()->Unit) {
+            playerRepository.preparePlayer(url, onCompleteListener)
     }
 
     override fun releasePlayer() {
-        playerRepository.releasePlayer()
+            playerRepository.releasePlayer()
     }
 
-    override fun setStatePlayer(stPlayer: StatePlayer) {
-        statePlayer = stPlayer
+    override fun getStatePlayer(onStateListener: (state: Int) -> Unit) {
+            playerRepository.getStatePlayer(onStateListener)
     }
-
-    override fun getStatePlayer(): StatePlayer = statePlayer
 
     override fun getCurrentPositionPlayer(): Int = playerRepository.getCurrentPositionPlayer()
 
-    override fun onCompletionPlay() {
-        viewModel.onCompletionPlay()
+    override fun setStatePlayer(state: Int) {
+            playerRepository.setStatePlayer(state)
     }
 
 }
