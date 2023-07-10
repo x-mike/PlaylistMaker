@@ -43,6 +43,7 @@
     <dimen name="icon_medium_size">45dp</dimen>
     <dimen name="icon_small_size">24dp</dimen>
     <dimen name="radius_corner_PlPoster">8dp</dimen>
+    <dimen name="radius_corner_RcklView">10dp</dimen>
     <dimen name="layout_size_medium">44dp</dimen>
 
 

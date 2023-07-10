@@ -54,7 +54,7 @@
     <LinearLayout
         android:id="@+id/no_connect_linearLayout"
         style="@style/LinearLayoutSearch"
-        tools:visibility="gone">
+        tools:visibility="visible">
 
 
         <ImageView style="@style/NoConnectImageView" />
