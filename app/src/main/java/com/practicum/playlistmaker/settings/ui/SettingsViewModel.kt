@@ -1,29 +1,15 @@
 package com.practicum.playlistmaker.settings.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
+import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 import com.practicum.playlistmaker.settings.domain.model.ThemeSettings
 import com.practicum.playlistmaker.settings.ui.model.SettingsState
+import com.practicum.playlistmaker.sharing.domain.SharingInteractor
 
-class SettingsViewModel(application: Application): AndroidViewModel(application) {
-
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
-    }
-
-    private val settingsInteractor = Creator.provideInteractorSettings(application)
-    private val sharingInteractor = Creator.provideInteracorSharing(application)
+class SettingsViewModel(private val settingsInteractor:SettingsInteractor,
+                        private val sharingInteractor:SharingInteractor ): ViewModel() {
 
     private val stateThemeLiveData = MutableLiveData<SettingsState>()
     fun getThemeLiveData(): LiveData<SettingsState> = stateThemeLiveData

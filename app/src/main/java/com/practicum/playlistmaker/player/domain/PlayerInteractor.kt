@@ -14,8 +14,6 @@ interface PlayerInteractor {
 
     fun getStatePlr():PlayerState
 
-    fun setStatePlr(state: PlayerState)
-
     fun getCurrentPositionPlayer (): Int
 
 }

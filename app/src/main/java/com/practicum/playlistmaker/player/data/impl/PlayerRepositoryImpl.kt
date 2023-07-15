@@ -7,9 +7,9 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.player.domain.PlayerRepository
 import java.io.FileNotFoundException
 
-class PlayerRepositoryImpl(val context: Context) : PlayerRepository {
+class PlayerRepositoryImpl(private val context: Context,
+                           private val mediaPlayer:MediaPlayer) : PlayerRepository {
 
-    val mediaPlayer = MediaPlayer()
 
     override fun preparePlayer(url: String?) {
 
@@ -17,7 +17,7 @@ class PlayerRepositoryImpl(val context: Context) : PlayerRepository {
             mediaPlayer.setDataSource(url)
             mediaPlayer.prepareAsync()
         } catch (exc: FileNotFoundException) {
-            Log.d("ErrorPlayer", context.getString(R.string.playback_error))
+            Log.e("ErrorPlayer", context.getString(R.string.playback_error))
         }
     }
 
@@ -49,6 +49,5 @@ class PlayerRepositoryImpl(val context: Context) : PlayerRepository {
            onCompleteListener()
 
         }
-
     }
 }

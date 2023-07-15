@@ -1,23 +1,9 @@
 package com.practicum.playlistmaker.main.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
+import com.practicum.playlistmaker.settings.domain.SettingsInteractor
 
-class MainViewModel(application: Application): AndroidViewModel(application) {
-
-   companion object{
-      fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-          initializer {
-              MainViewModel(this[APPLICATION_KEY] as Application)
-          }
-      }
-   }
-    private val settingsInteractor = Creator.provideInteractorSettings(application)
+class MainViewModel(private val settingsInteractor:SettingsInteractor): ViewModel() {
 
     fun setSavedAppTheme(){
         settingsInteractor.setSavedAppTheme()

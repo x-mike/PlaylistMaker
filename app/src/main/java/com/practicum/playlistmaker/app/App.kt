@@ -1,11 +1,26 @@
 package com.practicum.playlistmaker.app
 
 import android.app.Application
+import com.practicum.playlistmaker.di.DataModule
+import com.practicum.playlistmaker.di.InteractorModule
+import com.practicum.playlistmaker.di.RepositoryModule
+import com.practicum.playlistmaker.di.ViewModelModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
-class App: Application() {
+class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-// Here will by started screen saver in future. I`m will not delete this class...while. Night theme starting through MainActivity.
-}
+
+        startKoin {
+            androidContext(this@App)
+            modules(
+                DataModule().dataModule,
+                RepositoryModule().repositoryModule,
+                InteractorModule().iteractorModule,
+                ViewModelModule().viewModelModule
+            )
+        }
+    }
 }

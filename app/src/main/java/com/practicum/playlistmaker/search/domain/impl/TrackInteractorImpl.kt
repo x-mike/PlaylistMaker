@@ -6,7 +6,7 @@ import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.ResponseSearchState
 import java.util.concurrent.Executors
 
-class TrackInteractorImpl(val trackRepository: TrackRepository): TrackInteractor {
+class TrackInteractorImpl(private val trackRepository: TrackRepository): TrackInteractor {
 
     private val executor = Executors.newCachedThreadPool()
 

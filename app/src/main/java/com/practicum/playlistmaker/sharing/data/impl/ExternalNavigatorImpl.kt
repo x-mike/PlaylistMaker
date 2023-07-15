@@ -7,32 +7,42 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.sharing.domain.ExternalNavigator
 import com.practicum.playlistmaker.sharing.domain.model.EmailData
 
-class ExternalNavigatorImpl(val context:Context) : ExternalNavigator {
+class ExternalNavigatorImpl(private val context:Context,
+                            private val intent: Intent) : ExternalNavigator {
 
     override fun openLink(link: String) {
-        val intentAgreement = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+        intent.apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(link)
+        }
 
-        context.startActivity(intentAgreement.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
     override fun shareLink(link: String) {
-        val intentShareApp = Intent(Intent.ACTION_SEND)
 
-        intentShareApp.putExtra(Intent.EXTRA_TEXT,link)
-        intentShareApp.type = "text/plain"
+        intent.apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT,link)
+            type = "text/plain"
+        }
 
-        context.startActivity(intentShareApp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
     override fun sendEmail(email: String, subject: String, text: String) {
-        val intentSupportWrite = Intent(Intent.ACTION_SENDTO, Uri.parse(context.getString(R.string.mailto)))
 
-        intentSupportWrite.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
-        intentSupportWrite.putExtra(Intent.EXTRA_SUBJECT,subject)
-        intentSupportWrite.putExtra(Intent.EXTRA_TEXT,text)
+        intent.apply {
+            action = Intent.ACTION_SENDTO
+            data = Uri.parse(context.getString(R.string.mailto))
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+            putExtra(Intent.EXTRA_SUBJECT,subject)
+            putExtra(Intent.EXTRA_TEXT,text)
+        }
 
-        context.startActivity(intentSupportWrite.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-    }
+        context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+
+      }
 
     override fun getShareAppLink(): String = context.getString(R.string.pr_ya_android_developer)
 

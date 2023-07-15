@@ -1,41 +1,27 @@
 package com.practicum.playlistmaker.player.ui
 
-import android.app.Application
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
 import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(application: Application): AndroidViewModel(application) {
+class PlayerViewModel(private val playerInteractor:PlayerInteractor): ViewModel() {
 
     companion object{
-
         private const val DELAY_UPDATE_TIMER_MS = 500L
-
-        fun getViewModelFactory():ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(this[APPLICATION_KEY] as Application)
-            }
-        }
     }
-
-   private val playerInteractor = Creator.provideInteractorPlayer(application)
 
    private val handler = Handler(Looper.getMainLooper())
 
    private val stateLiveData = MutableLiveData<PlayerStateRender>()
    fun getLiveData():LiveData<PlayerStateRender> = stateLiveData
 
-    val runnableTask = object : Runnable {
+    private val runnableTask = object : Runnable {
         override fun run() {
 
                 if (playerInteractor.getStatePlr() == PlayerState.STATE_PLAYING ) {
@@ -80,9 +66,11 @@ class PlayerViewModel(application: Application): AndroidViewModel(application) {
          handler.removeCallbacks(runnableTask)
     }
 
-    fun onDestroyActivityPlayer(){
-        playerInteractor.setStatePlr(PlayerState.STATE_DEFAULT)
+    override fun onCleared() {
+        super.onCleared()
+        playerInteractor.releasePlayer()
         handler.removeCallbacks(runnableTask)
+
     }
 
      fun getDateFormat(): String {

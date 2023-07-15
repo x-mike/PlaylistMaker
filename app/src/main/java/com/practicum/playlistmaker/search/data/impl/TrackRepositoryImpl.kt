@@ -9,8 +9,8 @@ import com.practicum.playlistmaker.search.domain.TrackRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.ResponseSearchState
 
-class TrackRepositoryImpl (val networkClient: NetworkClient,
-                           val localStorage:LocalStorage): TrackRepository {
+class TrackRepositoryImpl (private val networkClient: NetworkClient,
+                           private val localStorage:LocalStorage): TrackRepository {
 
 
     override fun doRequestSearch(requestSearch: String): ResponseSearchState<List<Track>> {

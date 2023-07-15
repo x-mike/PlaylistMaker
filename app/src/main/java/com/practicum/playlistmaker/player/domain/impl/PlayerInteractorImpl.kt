@@ -4,7 +4,7 @@ import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.PlayerRepository
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 
-class PlayerInteractorImpl(val playerRepository: PlayerRepository) : PlayerInteractor {
+class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : PlayerInteractor {
 
     var statePlayer = PlayerState.STATE_DEFAULT
 
@@ -35,8 +35,5 @@ class PlayerInteractorImpl(val playerRepository: PlayerRepository) : PlayerInter
 
     override fun getCurrentPositionPlayer(): Int = playerRepository.getCurrentPositionPlayer()
 
-    override fun setStatePlr(state: PlayerState) {
-        statePlayer = state
-    }
 }
 

@@ -4,19 +4,19 @@ import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat.getDrawable
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.ui.model.TrackPlr
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlayerBinding
-    private lateinit var viewModel: PlayerViewModel
+    private val viewModel: PlayerViewModel by viewModel()
     private lateinit var dataTrack: TrackPlr
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,11 +24,6 @@ class PlayerActivity : AppCompatActivity() {
 
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory()
-        )[PlayerViewModel::class.java]
 
         viewModel.getLiveData().observe(this) {
             render(it)
@@ -46,13 +41,6 @@ class PlayerActivity : AppCompatActivity() {
         super.onPause()
 
         viewModel.onPauseActivityPlayer()
-
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        viewModel.onDestroyActivityPlayer()
 
     }
 
