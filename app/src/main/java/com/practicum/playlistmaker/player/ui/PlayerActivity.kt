@@ -19,6 +19,8 @@ class PlayerActivity : AppCompatActivity() {
     private val viewModel: PlayerViewModel by viewModel()
     private lateinit var dataTrack: TrackPlr
 
+    private var savedTimeTrack: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,11 +39,23 @@ class PlayerActivity : AppCompatActivity() {
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putCharSequence("play_time", viewModel.getDateFormat())
+
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        savedTimeTrack = savedInstanceState.getCharSequence("play_time").toString()
+
+    }
+
     override fun onPause() {
         super.onPause()
 
         viewModel.onPauseActivityPlayer()
-
     }
 
     private fun initializingTrackData() {
@@ -52,7 +66,6 @@ class PlayerActivity : AppCompatActivity() {
         } else {
             intent.getParcelableExtra("dataTrack") ?: TrackPlr()
         }
-
         binding.trackName.text = dataTrack.trackName.orEmpty()
         binding.artistName.text = dataTrack.artistName.orEmpty()
         binding.timeTrack.text = SimpleDateFormat("mm:ss", Locale.getDefault())
@@ -104,9 +117,17 @@ class PlayerActivity : AppCompatActivity() {
                     getDrawable(this.resources, R.drawable.button_play, this.theme)
             }
             PlayerStateRender.STATE_PREPARED, PlayerStateRender.STATE_DEFAULT -> {
-                binding.buttonPlay.background =
-                    getDrawable(this.resources, R.drawable.button_play, this.theme)
-                binding.timePlayingTrack.text = getString(R.string.start_time)
+                if (savedTimeTrack == "") {
+                    binding.buttonPlay.background =
+                        getDrawable(this.resources, R.drawable.button_play, this.theme)
+                    binding.timePlayingTrack.text = getString(R.string.start_time)
+                } else {
+                    binding.buttonPlay.background =
+                        getDrawable(this.resources, R.drawable.button_play, this.theme)
+                    binding.timePlayingTrack.text = savedTimeTrack
+                    savedTimeTrack = ""
+
+                }
             }
         }
     }
