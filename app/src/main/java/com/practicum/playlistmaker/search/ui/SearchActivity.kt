@@ -11,13 +11,13 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.player.ui.model.TrackPlr
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.search.ui.adapter.TracksAdapter
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchActivity : AppCompatActivity() {
@@ -26,7 +26,7 @@ class SearchActivity : AppCompatActivity() {
         private const val KEY_SEARCH = "KEY_SEARCH"
     }
 
-    private lateinit var viewModel: TrackSearchViewModel
+    private val viewModel: TrackSearchViewModel by viewModel()
 
     private val listTracks = ArrayList<Track>()
     private val listSearchHistory = ArrayList<Track>()
@@ -47,11 +47,6 @@ class SearchActivity : AppCompatActivity() {
 
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(
-            this,
-            TrackSearchViewModel.getViewModelFactory()
-        )[TrackSearchViewModel::class.java]
 
         viewModel.getLiveDataSearchState().observe(this) {
             render(it)

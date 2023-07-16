@@ -1,34 +1,21 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.search.domain.TrackInteractor
 import com.practicum.playlistmaker.search.domain.models.Track
 
-class TrackSearchViewModel(application:Application): AndroidViewModel(application) {
+class TrackSearchViewModel(private val trackInteractor:TrackInteractor): ViewModel() {
 
     companion object {
        private const val SEARCH_DEBOUNCE_DELAY = 2000L
        private val SEARCH_REQUEST_TOKEN = Any()
-
-    fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-        initializer {
-            TrackSearchViewModel(this[APPLICATION_KEY] as Application)
-        }
-    }
     }
 
-    private val trackInteractor = Creator.provideInteractorSearch(application)
     private val handler = Handler(Looper.getMainLooper())
 
     private val searchStateLiveData = MutableLiveData<TrackSearchState>()
@@ -38,7 +25,6 @@ class TrackSearchViewModel(application:Application): AndroidViewModel(applicatio
         set(value) {
         if(value == "")return else{ field = value}
     }
-
 
     override fun onCleared() {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
@@ -55,7 +41,7 @@ class TrackSearchViewModel(application:Application): AndroidViewModel(applicatio
                 doRequestSearch(searchRequest)
             }
 
-            var postTimeRunnable = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
+            val postTimeRunnable = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
             handler.postAtTime(searchRunnable, SEARCH_REQUEST_TOKEN,postTimeRunnable)
         }else{
 
