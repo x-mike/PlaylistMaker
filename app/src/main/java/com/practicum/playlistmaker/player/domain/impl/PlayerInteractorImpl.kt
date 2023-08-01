@@ -18,12 +18,16 @@ class PlayerInteractorImpl(private val playerRepository: PlayerRepository) : Pla
         statePlayer = PlayerState.STATE_PAUSED
     }
 
-    override fun preparePlayer(url: String?, onCompletePlaying:() -> Unit) {
-        playerRepository.preparePlayer(url)
-        playerRepository.setListenersPlayer(
-            { statePlayer = PlayerState.STATE_PREPARED },
-            { statePlayer = PlayerState.STATE_PREPARED
-              onCompletePlaying()})
+    override fun preparePlayer(url: String?, onCompletePlaying: () -> Unit) {
+        if (statePlayer == PlayerState.STATE_DEFAULT) {
+            playerRepository.preparePlayer(url)
+            playerRepository.setListenersPlayer(
+                { statePlayer = PlayerState.STATE_PREPARED },
+                {
+                    statePlayer = PlayerState.STATE_PREPARED
+                    onCompletePlaying()
+                })
+        }
     }
 
     override fun releasePlayer() {
