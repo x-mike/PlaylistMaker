@@ -38,6 +38,8 @@ android {
 }
 
 dependencies {
+    def fragment_version ="1.5.5"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
     implementation 'io.insert-koin:koin-android:3.3.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     //Interceptor for OkHttpClient

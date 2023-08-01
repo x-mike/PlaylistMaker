@@ -19,13 +19,13 @@
     <Button
         style="@style/StyleMainButton"
         android:id="@+id/media_button"
-        android:text="@string/button_media"
+        android:text="@string/media"
         app:icon="@drawable/media_24x24"/>
 
     <Button
         style="@style/StyleMainButton"
         android:id="@+id/settings_button"
-        android:text="@string/button_settings"
+        android:text="@string/settings"
         app:icon="@drawable/settings_24x24"
         />
 

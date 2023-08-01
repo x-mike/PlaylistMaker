@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/MenuLinearLayout">
+
+    <LinearLayout
+        android:id="@+id/no_found_linearLayout"
+        style="@style/LinearLayoutSearch"
+        tools:visibility="visible">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/new_playlist"
+            style="@style/ButtonMedium"
+            android:layout_marginBottom="0dp"
+            android:text="@string/button_new_playlist" />
+
+        <ImageView
+            style="@style/NoFoundImageView"
+            android:layout_marginTop="@dimen/item_marginTop_plhPlaylist"
+            />
+
+        <TextView
+            style="@style/PlaceholderTextMediaEmpty"
+            android:text="@string/playlist_empty" />
+
+    </LinearLayout>
+
+</androidx.appcompat.widget.LinearLayoutCompat>
