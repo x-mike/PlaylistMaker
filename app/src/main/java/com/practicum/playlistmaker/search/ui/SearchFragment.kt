@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.search.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,11 +7,13 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.ui.PlayerActivity
 import com.practicum.playlistmaker.player.ui.model.TrackPlr
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -20,7 +21,7 @@ import com.practicum.playlistmaker.search.ui.adapter.TracksAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
 
     companion object {
         private const val KEY_SEARCH = "KEY_SEARCH"
@@ -35,21 +36,28 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historySearchAdapter: TracksAdapter
 
     private var textSearchField: String = ""
-
-    private lateinit var binding: ActivitySearchBinding
-
+    private lateinit var binding: FragmentSearchBinding
     private val handler = Handler(Looper.getMainLooper())
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSearchBinding.inflate(inflater,container,false)
+        return binding.root
+    }
 
-    @SuppressLint("MissingInflatedId")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getLiveDataSearchState().observe(this) {
+        viewModel.getLiveDataSearchState().observe(viewLifecycleOwner) {
             render(it)
+        }
+
+        if (savedInstanceState != null) {
+        textSearchField = savedInstanceState.getCharSequence(KEY_SEARCH).toString()
         }
 
         tracksAdapter = TracksAdapter(listTracks, handler, setListenerForAdapter())
@@ -57,11 +65,12 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchField.setText(textSearchField)
         binding.recyclerViewTracks.adapter = tracksAdapter
-        binding.recyclerViewTracks.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewTracks.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerHistorySearch.adapter = historySearchAdapter
-        binding.recyclerHistorySearch.layoutManager = LinearLayoutManager(this)
+        binding.recyclerHistorySearch.layoutManager = LinearLayoutManager(requireContext())
 
         setListenersForSearch()
+
     }
 
     private fun doVisibilityIconDellText(s: CharSequence?): Int {
@@ -80,16 +89,10 @@ class SearchActivity : AppCompatActivity() {
 
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-
-        textSearchField = savedInstanceState.getCharSequence(KEY_SEARCH).toString()
-
-    }
 
     private fun hideSoftKeyboard() {
         val inputMethodManager =
-            getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         inputMethodManager?.hideSoftInputFromWindow(binding.icSearchFieldRemoveText.windowToken, 0)
     }
 
@@ -155,9 +158,6 @@ class SearchActivity : AppCompatActivity() {
             viewModel.searchDebounce("", true)
         }
 
-        binding.backButton.setOnClickListener {
-            finish()
-        }
     }
 
     private fun setListenerForAdapter(): TracksAdapter.TrackClickListener {
@@ -167,9 +167,9 @@ class SearchActivity : AppCompatActivity() {
 
                 viewModel.addTrackInHistory(track)
 
-                val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+                val intent = Intent(requireContext(), PlayerActivity::class.java)
                 intent.putExtra("dataTrack", TrackPlr.mappingTrack(track))
-                this@SearchActivity.startActivity(intent)
+                requireContext().startActivity(intent)
            }
         }
     }
