@@ -13,7 +13,7 @@
 
         <TextView
             style="@style/StyleToolbarTitle"
-            android:text="@string/button_settings"
+            android:text="@string/settings"
              />
 
     </androidx.appcompat.widget.Toolbar>
