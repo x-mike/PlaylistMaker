@@ -1,34 +1,37 @@
 package com.practicum.playlistmaker.settings.ui
 
-import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
 import com.practicum.playlistmaker.settings.ui.model.SettingsState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by viewModel()
-    private lateinit var binding: ActivitySettingsBinding
+    private lateinit var binding: FragmentSettingsBinding
 
-    @SuppressLint("MissingInflatedId")
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+        binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
 
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         getThemeSettings()
 
-        viewModel.getThemeLiveData().observe(this) {
+        viewModel.getThemeLiveData().observe(viewLifecycleOwner) {
             render(it)
-        }
-
-        binding.backButton.setOnClickListener {
-            finish()
         }
 
         binding.appShare.setOnClickListener {
@@ -46,6 +49,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.agreement.setOnClickListener {
 
             viewModel.openTerms()
+
         }
 
         binding.switchButton.setOnCheckedChangeListener { buttonView, isChecked ->

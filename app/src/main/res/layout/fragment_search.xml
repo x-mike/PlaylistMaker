@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".search.ui.SearchFragment"
     style="@style/MenuLinearLayout">
 
     <androidx.appcompat.widget.Toolbar style="@style/StyleToolbar">
-
-        <Button
-            android:id="@+id/back_button"
-            style="@style/StyleBackButton" />
 
         <TextView
             style="@style/StyleToolbarTitle"
