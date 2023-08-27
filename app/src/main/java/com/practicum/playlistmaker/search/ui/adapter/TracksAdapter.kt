@@ -3,16 +3,19 @@ package com.practicum.playlistmaker.search.ui.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.search.domain.models.Track
-import android.os.Handler
+import androidx.lifecycle.LifecycleCoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class TracksAdapter(private val listTrack: List<Track>,
-                    private val handler: Handler,
-                    private val listener: TrackClickListener
+class TracksAdapter(
+    private val listTrack: List<Track>,
+    private val lifecycleScope: LifecycleCoroutineScope,
+    private val listener: TrackClickListener
 ) : RecyclerView.Adapter<TracksViewHolder>() {
 
-companion object{
-    private const val CLICK_DEBOUNCE_DELAY = 1000L
-}
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
 
     private var isClickAllowed = true
 
@@ -25,14 +28,14 @@ companion object{
 
         holder.bind(listTrack[position])
 
-             holder.itemView.setOnClickListener {
+        holder.itemView.setOnClickListener {
 
-                 if (clickDebounce()) {
+            if (clickDebounce()) {
 
-                 listener.onClickView(listTrack[position])
+                listener.onClickView(listTrack[position])
 
-                 }
-             }
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -43,16 +46,19 @@ companion object{
 
         val isCurrentAllowedClick = isClickAllowed
 
-        if (isClickAllowed){
+        if (isClickAllowed) {
             isClickAllowed = false
 
-            handler.postDelayed({isClickAllowed = true}, CLICK_DEBOUNCE_DELAY)
+            lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
 
         return isCurrentAllowedClick
     }
 
     interface TrackClickListener {
-        fun onClickView(track:Track)
+        fun onClickView(track: Track)
     }
 }

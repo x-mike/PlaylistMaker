@@ -1,91 +1,95 @@
 package com.practicum.playlistmaker.player.ui
 
-import android.os.Looper
-import android.os.Handler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(private val playerInteractor:PlayerInteractor): ViewModel() {
+class PlayerViewModel(private val playerInteractor: PlayerInteractor) : ViewModel() {
 
-    companion object{
-        private const val DELAY_UPDATE_TIMER_MS = 500L
+    companion object {
+        private const val DELAY_UPDATE_TIMER_MS = 300L
     }
 
-   private val handler = Handler(Looper.getMainLooper())
+    private val stateLiveData = MutableLiveData<PlayerStateRender>()
+    fun getLiveData(): LiveData<PlayerStateRender> = stateLiveData
 
-   private val stateLiveData = MutableLiveData<PlayerStateRender>()
-   fun getLiveData():LiveData<PlayerStateRender> = stateLiveData
+    private var timerJob: Job? = null
 
-    private val runnableTask = object : Runnable {
-        override fun run() {
 
-                if (playerInteractor.getStatePlr() == PlayerState.STATE_PLAYING ) {
-
-                    renderState(PlayerStateRender.STATE_PLAYING)
-
-                    handler.postDelayed(this, DELAY_UPDATE_TIMER_MS)
-                }
-            }
-        }
-
-    fun preparePlayer (previewUrl: String){
-        playerInteractor.preparePlayer(previewUrl){
-        renderState(PlayerStateRender.STATE_PREPARED)
+    fun preparePlayer(previewUrl: String) {
+        playerInteractor.preparePlayer(previewUrl) {
+            renderState(PlayerStateRender.STATE_PREPARED)
+            cancelJobTimer()
         }
         renderState(PlayerStateRender.STATE_PREPARED)
     }
 
-    private fun startPlayer(){
+    private fun startPlayer() {
         playerInteractor.startPlayer()
         renderState(PlayerStateRender.STATE_PLAYING)
-        updateTimerTrack()
+        startTimer()
     }
 
-    private fun pausePlayer(){
+    private fun pausePlayer() {
         playerInteractor.pausePlayer()
         renderState(PlayerStateRender.STATE_PAUSED)
-        handler.removeCallbacks(runnableTask)
+        cancelJobTimer()
     }
 
-    fun playbackControl(){
-        if(playerInteractor.getStatePlr() == PlayerState.STATE_PLAYING){
+    fun playbackControl() {
+        if (playerInteractor.getStatePlr() == PlayerState.STATE_PLAYING) {
             pausePlayer()
-        }
-        else{
+        } else {
             startPlayer()
         }
     }
 
-    fun onPauseActivityPlayer(){
-         pausePlayer()
-         handler.removeCallbacks(runnableTask)
+    fun onPauseActivityPlayer() {
+        pausePlayer()
     }
 
     override fun onCleared() {
         super.onCleared()
         playerInteractor.releasePlayer()
-        handler.removeCallbacks(runnableTask)
-
+        cancelJobTimer()
     }
 
-     fun getDateFormat(): String {
-         return SimpleDateFormat("mm:ss", Locale.getDefault())
-             .format(playerInteractor.getCurrentPositionPlayer())
-     }
-
-    private fun updateTimerTrack() {
-        handler.postDelayed(runnableTask, DELAY_UPDATE_TIMER_MS)
+    fun getDateFormat(): String {
+        return SimpleDateFormat("mm:ss", Locale.getDefault())
+            .format(playerInteractor.getCurrentPositionPlayer())
     }
 
-    fun renderState(state:PlayerStateRender){
+    fun startTimer() {
+        timerJob = viewModelScope.launch {
+
+            while (playerInteractor.getStatePlr() == PlayerState.STATE_PLAYING) {
+
+                delay(DELAY_UPDATE_TIMER_MS)
+                renderState(PlayerStateRender.STATE_PLAYING)
+
+            }
+        }
+    }
+
+    fun cancelJobTimer() {
+        timerJob?.cancel()
+    }
+
+
+    fun renderState(state: PlayerStateRender) {
         stateLiveData.postValue(state)
     }
- }
+
+
+}
 
 
 

@@ -8,17 +8,17 @@ import com.practicum.playlistmaker.search.data.dto.TrackSearchRequest
 import com.practicum.playlistmaker.search.domain.TrackRepository
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.ResponseSearchState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TrackRepositoryImpl (private val networkClient: NetworkClient,
                            private val localStorage:LocalStorage): TrackRepository {
 
-
-    override fun doRequestSearch(requestSearch: String): ResponseSearchState<List<Track>> {
-
+    override suspend fun doRequestSearch(requestSearch: String): Flow<ResponseSearchState<List<Track>>> = flow{
         val response = networkClient.doRequest(TrackSearchRequest(requestSearch))
 
         when(response.responseCode){
-            200 -> { return ResponseSearchState.Successful((response as ListTracksResponse)
+            200 -> {emit(ResponseSearchState.Successful((response as ListTracksResponse)
             .listTracks.map {
                     Track(it.trackName,
                         it.artistName,
@@ -30,13 +30,13 @@ class TrackRepositoryImpl (private val networkClient: NetworkClient,
                         it.primaryGenreName,
                         it.country,
                         it.previewUrl)
-                })
+                }))
             }else-> {
-                return ResponseSearchState.Error(statusError = true)
+                  emit(ResponseSearchState.Error(statusError = true))
             }
-
           }
         }
+
 
     override fun addTrackInHistory(track:Track) {
 

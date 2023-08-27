@@ -2,9 +2,10 @@ package com.practicum.playlistmaker.search.domain
 
 import com.practicum.playlistmaker.search.domain.models.Track
 import com.practicum.playlistmaker.util.ResponseSearchState
+import kotlinx.coroutines.flow.Flow
 
 interface TrackRepository {
-    fun doRequestSearch(requestSearch: String): ResponseSearchState<List<Track>>
+    suspend fun doRequestSearch(requestSearch: String): Flow<ResponseSearchState<List<Track>>>
 
     fun getHistorySearch(): List<Track>
 
