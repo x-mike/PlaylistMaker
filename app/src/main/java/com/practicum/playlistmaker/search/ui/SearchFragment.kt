@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
@@ -37,7 +36,6 @@ class SearchFragment : Fragment() {
 
     private var textSearchField: String = ""
     private lateinit var binding: FragmentSearchBinding
-    private lateinit var lifecycleScope: LifecycleCoroutineScope
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +48,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope = viewLifecycleOwner.lifecycleScope
 
         viewModel.getLiveDataSearchState().observe(viewLifecycleOwner) {
             render(it)
@@ -60,8 +57,8 @@ class SearchFragment : Fragment() {
         textSearchField = savedInstanceState.getCharSequence(KEY_SEARCH).toString()
         }
 
-        tracksAdapter = TracksAdapter(listTracks, lifecycleScope, setListenerForAdapter())
-        historySearchAdapter = TracksAdapter(listSearchHistory, lifecycleScope, setListenerForAdapter())
+        tracksAdapter = TracksAdapter(listTracks, { lifecycleScope }, setListenerForAdapter())
+        historySearchAdapter = TracksAdapter(listSearchHistory, { lifecycleScope }, setListenerForAdapter())
 
         binding.searchField.setText(textSearchField)
         binding.recyclerViewTracks.adapter = tracksAdapter
@@ -88,7 +85,6 @@ class SearchFragment : Fragment() {
         outState.putCharSequence(KEY_SEARCH, textSearchField)
 
     }
-
 
     private fun hideSoftKeyboard() {
         val inputMethodManager =
@@ -171,6 +167,16 @@ class SearchFragment : Fragment() {
                 intent.putExtra("dataTrack", TrackPlr.mappingTrack(track))
                 requireContext().startActivity(intent)
            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(binding.searchField.text.isNotEmpty()){
+            viewModel.doRequestSearch(binding.searchField.text.toString())
+        }
+        else{
+            viewModel.setStateSavedSearch()
         }
     }
 

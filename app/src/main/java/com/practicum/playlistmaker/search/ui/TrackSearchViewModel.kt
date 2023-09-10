@@ -10,7 +10,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class TrackSearchViewModel(private val trackInteractor: TrackInteractor) : ViewModel() {
+class TrackSearchViewModel(private val trackInteractor:TrackInteractor) : ViewModel() {
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
@@ -55,7 +55,7 @@ class TrackSearchViewModel(private val trackInteractor: TrackInteractor) : ViewM
         latestSearchRequest = searchRequest
     }
 
-    private fun doRequestSearch(searchRequest: String) {
+     fun doRequestSearch(searchRequest: String) {
         if (searchRequest.isNotEmpty()) {
             renderState(TrackSearchState.Loading())
 

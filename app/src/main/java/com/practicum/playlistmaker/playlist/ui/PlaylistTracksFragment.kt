@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.media.ui.fragments
+package com.practicum.playlistmaker.playlist.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.practicum.playlistmaker.databinding.FragmentPlaylistTracksBinding
-import com.practicum.playlistmaker.media.ui.PlaylistTracksViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistTracksFragment: Fragment() {
