@@ -3,8 +3,6 @@ package com.practicum.playlistmaker.search.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -12,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.ui.PlayerActivity
@@ -37,7 +37,7 @@ class SearchFragment : Fragment() {
 
     private var textSearchField: String = ""
     private lateinit var binding: FragmentSearchBinding
-    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var lifecycleScope: LifecycleCoroutineScope
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,9 +48,9 @@ class SearchFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        lifecycleScope = viewLifecycleOwner.lifecycleScope
 
         viewModel.getLiveDataSearchState().observe(viewLifecycleOwner) {
             render(it)
@@ -60,8 +60,8 @@ class SearchFragment : Fragment() {
         textSearchField = savedInstanceState.getCharSequence(KEY_SEARCH).toString()
         }
 
-        tracksAdapter = TracksAdapter(listTracks, handler, setListenerForAdapter())
-        historySearchAdapter = TracksAdapter(listSearchHistory, handler, setListenerForAdapter())
+        tracksAdapter = TracksAdapter(listTracks, lifecycleScope, setListenerForAdapter())
+        historySearchAdapter = TracksAdapter(listSearchHistory, lifecycleScope, setListenerForAdapter())
 
         binding.searchField.setText(textSearchField)
         binding.recyclerViewTracks.adapter = tracksAdapter
