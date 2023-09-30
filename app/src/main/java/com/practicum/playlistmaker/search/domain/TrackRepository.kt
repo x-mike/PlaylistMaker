@@ -13,4 +13,6 @@ interface TrackRepository {
 
     fun addTrackInHistory(track:Track)
 
+    suspend fun getIdTracks():List<Long>?
+
 }

@@ -31,6 +31,10 @@ class PlayerActivity : AppCompatActivity() {
             render(it)
         }
 
+        viewModel.getFavoriteLiveData().observe(this) {
+            renderFavorite(it)
+        }
+
         initializingTrackData()
 
         viewModel.preparePlayer(dataTrack.previewUrl ?: "")
@@ -66,6 +70,9 @@ class PlayerActivity : AppCompatActivity() {
         } else {
             intent.getParcelableExtra("dataTrack") ?: TrackPlr()
         }
+
+        viewModel.controlFavoriteState(dataTrack.isFavorite)
+
         binding.trackName.text = dataTrack.trackName.orEmpty()
         binding.artistName.text = dataTrack.artistName.orEmpty()
         binding.timeTrack.text = SimpleDateFormat("mm:ss", Locale.getDefault())
@@ -100,6 +107,17 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.buttonHeart.setOnClickListener {
+            if (dataTrack.isFavorite){
+                viewModel.delInFavorite(dataTrack.trackId)
+                dataTrack.isFavorite = false
+            }
+            else {
+                viewModel.addToFavorite(dataTrack)
+                dataTrack.isFavorite = true
+            }
+        }
+
         binding.buttonPlay.setOnClickListener {
             viewModel.playbackControl()
         }
@@ -129,6 +147,16 @@ class PlayerActivity : AppCompatActivity() {
 
                 }
             }
+        }
+    }
+
+    private fun renderFavorite(state: PlayerStateFavorite) {
+        when (state) {
+            PlayerStateFavorite.IN_FAVORITE_STATE -> binding.buttonHeart.background =
+                getDrawable(this.resources, R.drawable.button_red_heart, this.theme)
+
+            PlayerStateFavorite.NOT_IN_FAVORITE_STATE -> binding.buttonHeart.background =
+                getDrawable(this.resources,R.drawable.button_heart,this.theme)
         }
     }
 

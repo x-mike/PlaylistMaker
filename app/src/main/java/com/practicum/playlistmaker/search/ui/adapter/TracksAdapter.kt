@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class TracksAdapter(
     private val listTrack: List<Track>,
-    private val lifecycleScope: LifecycleCoroutineScope,
+    private val lifecycleScope: () -> LifecycleCoroutineScope,
     private val listener: TrackClickListener
 ) : RecyclerView.Adapter<TracksViewHolder>() {
 
@@ -49,7 +49,7 @@ class TracksAdapter(
         if (isClickAllowed) {
             isClickAllowed = false
 
-            lifecycleScope.launch {
+            lifecycleScope.invoke().launch {
                 delay(CLICK_DEBOUNCE_DELAY)
                 isClickAllowed = true
             }

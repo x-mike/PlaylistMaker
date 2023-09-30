@@ -4,15 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.practicum.playlistmaker.favorite.domain.FavoriteInteractor
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.ui.model.TrackPlr
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(private val playerInteractor: PlayerInteractor) : ViewModel() {
+class PlayerViewModel(
+    private val playerInteractor: PlayerInteractor,
+    private val favoriteInteractor: FavoriteInteractor
+) : ViewModel() {
 
     companion object {
         private const val DELAY_UPDATE_TIMER_MS = 300L
@@ -20,6 +25,9 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor) : ViewMode
 
     private val stateLiveData = MutableLiveData<PlayerStateRender>()
     fun getLiveData(): LiveData<PlayerStateRender> = stateLiveData
+
+    private val favoriteStateLiveData = MutableLiveData<PlayerStateFavorite>()
+    fun getFavoriteLiveData(): LiveData<PlayerStateFavorite> = favoriteStateLiveData
 
     private var timerJob: Job? = null
 
@@ -67,7 +75,7 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor) : ViewMode
             .format(playerInteractor.getCurrentPositionPlayer())
     }
 
-    fun startTimer() {
+    private fun startTimer() {
         timerJob = viewModelScope.launch {
 
             while (playerInteractor.getStatePlr() == PlayerState.STATE_PLAYING) {
@@ -79,15 +87,37 @@ class PlayerViewModel(private val playerInteractor: PlayerInteractor) : ViewMode
         }
     }
 
-    fun cancelJobTimer() {
+    fun addToFavorite(track:TrackPlr){
+        viewModelScope.launch {
+            favoriteInteractor.insertTrack(TrackPlr.mappingTrack(track))
+            controlFavoriteState(true)
+        }
+    }
+
+    fun delInFavorite(idTrack:Long?){
+        viewModelScope.launch {
+            favoriteInteractor.deleteTrack(idTrack)
+            controlFavoriteState(false)
+        }
+    }
+
+    fun controlFavoriteState(key: Boolean){
+        if(key)renderFavoriteState(PlayerStateFavorite.IN_FAVORITE_STATE)
+        else renderFavoriteState(PlayerStateFavorite.NOT_IN_FAVORITE_STATE)
+    }
+
+    private fun cancelJobTimer() {
         timerJob?.cancel()
     }
 
 
-    fun renderState(state: PlayerStateRender) {
+    private fun renderState(state: PlayerStateRender) {
         stateLiveData.postValue(state)
     }
 
+    private fun renderFavoriteState(state:PlayerStateFavorite){
+        favoriteStateLiveData.postValue(state)
+    }
 
 }
 

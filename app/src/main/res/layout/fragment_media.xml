@@ -2,7 +2,7 @@
 <androidx.appcompat.widget.LinearLayoutCompat
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".media.ui.fragments.MediaFragment"
+    tools:context=".media.ui.MediaFragment"
     style="@style/MenuLinearLayout">
 
     <androidx.appcompat.widget.Toolbar style="@style/StyleToolbar">

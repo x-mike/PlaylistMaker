@@ -1,8 +1,8 @@
 package com.practicum.playlistmaker.di
 
 import com.practicum.playlistmaker.media.ui.MediaViewModel
-import com.practicum.playlistmaker.media.ui.FavoriteTracksViewModel
-import com.practicum.playlistmaker.media.ui.PlaylistTracksViewModel
+import com.practicum.playlistmaker.favorite.ui.FavoriteTracksViewModel
+import com.practicum.playlistmaker.playlist.ui.PlaylistTracksViewModel
 import com.practicum.playlistmaker.player.ui.PlayerViewModel
 import com.practicum.playlistmaker.search.ui.TrackSearchViewModel
 import com.practicum.playlistmaker.settings.ui.SettingsViewModel
@@ -16,7 +16,7 @@ class ViewModelModule {
             MediaViewModel(get())
         }
         viewModel {
-            PlayerViewModel(get())
+            PlayerViewModel(get(),get())
         }
         viewModel {
             TrackSearchViewModel(get())
@@ -25,7 +25,7 @@ class ViewModelModule {
             SettingsViewModel(get(),get())
         }
         viewModel{
-            FavoriteTracksViewModel()
+            FavoriteTracksViewModel(get())
         }
         viewModel{
             PlaylistTracksViewModel()

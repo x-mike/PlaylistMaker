@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.di
 
+import com.practicum.playlistmaker.favorite.domain.FavoriteInteractor
+import com.practicum.playlistmaker.favorite.domain.impl.FavoriteInteractorImpl
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.impl.PlayerInteractorImpl
 import com.practicum.playlistmaker.search.domain.TrackInteractor
@@ -27,6 +29,10 @@ class InteractorModule {
 
         single<SharingInteractor>{
             SharingInteractorImpl(get())
+        }
+
+        single<FavoriteInteractor>{
+            FavoriteInteractorImpl(get())
         }
     }
 }

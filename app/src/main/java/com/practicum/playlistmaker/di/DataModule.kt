@@ -2,7 +2,9 @@ package com.practicum.playlistmaker.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.Room
 import com.google.gson.Gson
+import com.practicum.playlistmaker.favorite.data.db.FavoriteDataBase
 import com.practicum.playlistmaker.search.data.local.LocalStorage
 import com.practicum.playlistmaker.search.data.local.impl.LocalStorageImpl
 import com.practicum.playlistmaker.search.data.network.ItunesApi
@@ -17,6 +19,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class DataModule {
 
+    companion object{
+        private val dbFavoriteTracks: String = "dbFavoriteTracks.db"
+        private val itunesBaseUrl = "https://itunes.apple.com"
+    }
+
     val dataModule = module {
 
         //Dependency for NetworkClientImpl
@@ -30,8 +37,6 @@ class DataModule {
              val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(interceptorHttp)
                 .build()
-
-             val itunesBaseUrl = "https://itunes.apple.com"
 
                  Retrofit.Builder()
                 .client(okHttpClient)
@@ -57,6 +62,12 @@ class DataModule {
 
         single<LocalStorage>{
             LocalStorageImpl(get(),get())
+        }
+
+        //Dependency for FavoriteRepositoryImpl
+        single{
+            Room.databaseBuilder(androidContext(),FavoriteDataBase::class.java, dbFavoriteTracks)
+                .build()
         }
 
     }

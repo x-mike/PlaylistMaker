@@ -230,6 +230,12 @@
         <item name="android:layout_marginTop">@dimen/margin_top_height</item>
     </style>
 
+    <style name="PlayerButtAddFavorite">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_top_height</item>
+    </style>
+
     <style name="PlayerPlaybackButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

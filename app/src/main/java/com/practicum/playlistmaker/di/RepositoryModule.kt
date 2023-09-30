@@ -3,6 +3,8 @@ package com.practicum.playlistmaker.di
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
+import com.practicum.playlistmaker.favorite.data.impl.FavoriteRepositoryImpl
+import com.practicum.playlistmaker.favorite.domain.FavoriteRepository
 import com.practicum.playlistmaker.player.data.impl.PlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.PlayerRepository
 import com.practicum.playlistmaker.search.data.impl.TrackRepositoryImpl
@@ -19,7 +21,7 @@ class RepositoryModule {
         module {
 
             single<TrackRepository>{
-                TrackRepositoryImpl(get(),get())
+                TrackRepositoryImpl(get(),get(),get())
             }
 
             factory<PlayerRepository>{
@@ -32,6 +34,10 @@ class RepositoryModule {
 
             single<ExternalNavigator>{
                 ExternalNavigatorImpl(androidContext(),get())
+            }
+
+            single<FavoriteRepository>{
+                FavoriteRepositoryImpl(get())
             }
 
             // MediaPlayer for PlayerRepositoryImpl
