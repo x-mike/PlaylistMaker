@@ -8,6 +8,10 @@ import com.practicum.playlistmaker.favorite.domain.FavoriteInteractor
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.model.TrackPlr
+import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
+import com.practicum.playlistmaker.playlist.domain.models.EmptyStatePlaylist
+import com.practicum.playlistmaker.playlist.domain.models.StateAddDb
+import com.practicum.playlistmaker.playlist.domain.models.Playlist
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -16,7 +20,8 @@ import java.util.Locale
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
-    private val favoriteInteractor: FavoriteInteractor
+    private val favoriteInteractor: FavoriteInteractor,
+    private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
     companion object {
@@ -28,6 +33,12 @@ class PlayerViewModel(
 
     private val favoriteStateLiveData = MutableLiveData<PlayerStateFavorite>()
     fun getFavoriteLiveData(): LiveData<PlayerStateFavorite> = favoriteStateLiveData
+
+    private val emptyPlaylistLiveData = MutableLiveData<EmptyStatePlaylist>()
+    fun getEmptyPlaylistLiveData(): LiveData<EmptyStatePlaylist> = emptyPlaylistLiveData
+
+    private val addPlaylistLivaData = MutableLiveData<StateAddDb>()
+    fun getAddPlaylistLivaData(): LiveData<StateAddDb> = addPlaylistLivaData
 
     private var timerJob: Job? = null
 
@@ -87,22 +98,22 @@ class PlayerViewModel(
         }
     }
 
-    fun addToFavorite(track:TrackPlr){
+    fun addToFavorite(track: TrackPlr) {
         viewModelScope.launch {
             favoriteInteractor.insertTrack(TrackPlr.mappingTrack(track))
             controlFavoriteState(true)
         }
     }
 
-    fun delInFavorite(idTrack:Long?){
+    fun delInFavorite(idTrack: Long?) {
         viewModelScope.launch {
             favoriteInteractor.deleteTrack(idTrack)
             controlFavoriteState(false)
         }
     }
 
-    fun controlFavoriteState(key: Boolean){
-        if(key)renderFavoriteState(PlayerStateFavorite.IN_FAVORITE_STATE)
+    fun controlFavoriteState(key: Boolean) {
+        if (key) renderFavoriteState(PlayerStateFavorite.IN_FAVORITE_STATE)
         else renderFavoriteState(PlayerStateFavorite.NOT_IN_FAVORITE_STATE)
     }
 
@@ -110,15 +121,70 @@ class PlayerViewModel(
         timerJob?.cancel()
     }
 
+    fun getAllPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor.getAllPlaylists().collect {
+                when (it) {
+                    is EmptyStatePlaylist.EmptyPlaylist -> renderPlaylistState(it)
+                    is EmptyStatePlaylist.NotEmptyPlaylist -> renderPlaylistState(it)
+                }
+            }
+        }
+    }
+
+    fun addTrackInPlaylist(track:TrackPlr, playlist:Playlist) {
+
+        if (track.trackId == null) {
+            renderAddTrackState(StateAddDb.Error())
+            return
+        }
+
+        viewModelScope.launch {
+
+            if (playlist.tracksInPlaylist == null) {
+                val stateError = playlistInteractor.addTrackInPlaylist(
+                    TrackPlr.mappingTrack(track),
+                    playlist.id!!
+                )
+                when (stateError) {
+                    is StateAddDb.Error -> renderAddTrackState(StateAddDb.Error())
+                    is StateAddDb.NoError -> renderAddTrackState(StateAddDb.NoError(playlist.playlistName))
+                    is StateAddDb.Match -> renderAddTrackState(StateAddDb.Error())
+                }
+            } else {
+
+                if (playlist.tracksInPlaylist.contains(track.trackId!!)) {
+                    renderAddTrackState(StateAddDb.Match(playlist.playlistName))
+                } else {
+                    val stateError = playlistInteractor.addTrackInPlaylist(
+                        TrackPlr.mappingTrack(track),
+                        playlist.id!!
+                    )
+                    when (stateError) {
+                        is StateAddDb.Error -> renderAddTrackState(StateAddDb.Error())
+                        is StateAddDb.NoError -> renderAddTrackState(StateAddDb.NoError(playlist.playlistName))
+                        is StateAddDb.Match -> renderAddTrackState(StateAddDb.Error())
+                    }
+                }
+            }
+        }
+    }
 
     private fun renderState(state: PlayerStateRender) {
         stateLiveData.postValue(state)
     }
 
-    private fun renderFavoriteState(state:PlayerStateFavorite){
+    private fun renderFavoriteState(state: PlayerStateFavorite) {
         favoriteStateLiveData.postValue(state)
     }
 
+    private fun renderPlaylistState(state: EmptyStatePlaylist) {
+        emptyPlaylistLiveData.postValue(state)
+    }
+
+    private fun renderAddTrackState(state: StateAddDb){
+        addPlaylistLivaData.postValue(state)
+    }
 }
 
 
