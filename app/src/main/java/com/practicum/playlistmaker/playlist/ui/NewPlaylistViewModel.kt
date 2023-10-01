@@ -16,13 +16,17 @@ class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor): 
 
     fun addPlaylist(playlist: Playlist){
 
+        playlist.imageInStorage = playlistInteractor.getSavedImageFromPrivateStorage(playlist.imageInStorage)
+
         viewModelScope.launch {
+
             val result = playlistInteractor.addPlaylist(playlist)
 
             when(result){
                 is StateAddDb.Error -> renderState(result)
                 is StateAddDb.NoError -> renderState(result)
                 is StateAddDb.Match -> renderState(result)
+                is StateAddDb.NoData ->renderState(result)
             }
         }
     }

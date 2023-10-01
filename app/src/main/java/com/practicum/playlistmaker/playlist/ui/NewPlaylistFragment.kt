@@ -3,12 +3,9 @@ package com.practicum.playlistmaker.playlist.ui
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,7 +19,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -44,11 +40,6 @@ import com.practicum.playlistmaker.playlist.domain.models.StateAddDb
 import com.practicum.playlistmaker.playlist.domain.models.Playlist
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.io.File
-import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
 
 class NewPlaylistFragment : Fragment() {
 
@@ -194,7 +185,7 @@ class NewPlaylistFragment : Fragment() {
              newPlaylistViewModel.addPlaylist(Playlist(
                  playlistName = playlistNameTemp,
                  descriptionPlaylist = descriptionPlaylistTemp,
-                 imageInStorage = getSavedImageFromPrivateStorage(uriImageTemp)
+                 imageInStorage = uriImageTemp.toString()
                  ))
         }
 
@@ -261,34 +252,6 @@ class NewPlaylistFragment : Fragment() {
         }
     }
 
-    private fun getSavedImageFromPrivateStorage(uri: Uri?): String? {
-
-            if(uri != null) {
-                val filePath =
-                    File(
-                        requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
-                        "album"
-                    )
-
-                if (!filePath.exists()) {
-                    filePath.mkdir()
-                }
-
-                val timeStamp =
-                    SimpleDateFormat("dd.MM.yyyy_hh:mm", Locale.getDefault()).format(Date().time)
-                val file = File(filePath, "cover-$timeStamp")
-
-                val inputStream = requireContext().contentResolver.openInputStream(uri)
-                val outputStream = FileOutputStream(file)
-
-                BitmapFactory.decodeStream(inputStream)
-                    .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
-
-                return file.toUri().toString()
-            }
-        return null
-    }
-
     private fun render(state:StateAddDb){
         when(state){
             is StateAddDb.Error -> {Log.e("ErrorAddPlaylist",R.string.error_add_playlist.toString())}
@@ -308,6 +271,9 @@ class NewPlaylistFragment : Fragment() {
                 }
             }
             is StateAddDb.Match -> {Log.e("ErrorAddPlaylist", R.string.error_match_playlist.toString())}
+            is StateAddDb.NoData->{
+                //State for Single Live Event, show Toast and other way
+            }
         }
     }
 

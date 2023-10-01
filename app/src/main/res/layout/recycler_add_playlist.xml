@@ -6,7 +6,7 @@
     <ImageView
         android:id="@+id/reclr_add_plst_image"
         style="@style/ImageInTracksRecycler"
-        tools:src="@drawable/placeholder_45x45" />
+        tools:src="@drawable/placeholder_45x45"/>
 
     <LinearLayout
         android:layout_width="0dp"

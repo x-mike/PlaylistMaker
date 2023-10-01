@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.player.ui
+package com.practicum.playlistmaker.player.ui.states
 
 enum class PlayerStateFavorite {
     IN_FAVORITE_STATE,

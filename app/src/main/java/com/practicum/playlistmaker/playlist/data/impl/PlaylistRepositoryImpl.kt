@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.playlist.data.db.PlaylistDataBase
 import com.practicum.playlistmaker.playlist.data.db.models.PlaylistEntity
 import com.practicum.playlistmaker.playlist.data.db.models.TrackEntityInPlaylist
+import com.practicum.playlistmaker.playlist.data.storage.PlaylistStorage
 import com.practicum.playlistmaker.playlist.domain.PlaylistRepository
 import com.practicum.playlistmaker.playlist.domain.models.Playlist
 import com.practicum.playlistmaker.search.domain.models.Track
@@ -15,7 +16,8 @@ import kotlinx.coroutines.withContext
 
 class PlaylistRepositoryImpl(
     private val database: PlaylistDataBase,
-    private val gson: Gson
+    private val gson: Gson,
+    private val storage: PlaylistStorage
 ) : PlaylistRepository {
 
     companion object {
@@ -137,6 +139,10 @@ class PlaylistRepositoryImpl(
         )
 
         database.getPlaylistDao().updatePlaylist(newModifiedPlaylist)
+    }
+
+    override fun getSavedImageFromPrivateStorage(uriFile: String?): String? {
+        return  storage.getSavedImageFromPrivateStorage(uriFile)
     }
 
 }

@@ -43,7 +43,7 @@ class RepositoryModule {
             }
 
             single<PlaylistRepository> {
-                PlaylistRepositoryImpl(get(),get())
+                PlaylistRepositoryImpl(get(),get(),get())
             }
 
             // MediaPlayer for PlayerRepositoryImpl

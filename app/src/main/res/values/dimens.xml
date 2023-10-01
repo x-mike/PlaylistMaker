@@ -36,6 +36,7 @@
     <dimen name="item_margin_low">8dp</dimen>
     <dimen name="item_marginEnd_low">12dp</dimen>
     <dimen name="item_marginEnd_medium">24dp</dimen>
+    <dimen name="item_marginStart_veryLow">4dp</dimen>
     <dimen name="item_marginStart_low">13dp</dimen>
     <dimen name="item_marginStart_medium">24dp</dimen>
     <dimen name="item_marginTop_low">16dp</dimen>

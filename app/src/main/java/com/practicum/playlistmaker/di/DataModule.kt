@@ -6,8 +6,10 @@ import androidx.room.Room
 import com.google.gson.Gson
 import com.practicum.playlistmaker.favorite.data.db.FavoriteDataBase
 import com.practicum.playlistmaker.playlist.data.db.PlaylistDataBase
-import com.practicum.playlistmaker.search.data.local.LocalStorage
-import com.practicum.playlistmaker.search.data.local.impl.LocalStorageImpl
+import com.practicum.playlistmaker.playlist.data.storage.PlaylistStorage
+import com.practicum.playlistmaker.playlist.data.storage.impl.PlaylistStorageImpl
+import com.practicum.playlistmaker.search.data.storage.HistoryStorage
+import com.practicum.playlistmaker.search.data.storage.impl.HistoryStorageImpl
 import com.practicum.playlistmaker.search.data.network.ItunesApi
 import com.practicum.playlistmaker.search.data.network.NetworkClient
 import com.practicum.playlistmaker.search.data.network.impl.NetworkClientImpl
@@ -48,12 +50,12 @@ class DataModule {
                 .create(ItunesApi::class.java)
         }
 
-        // Dependency for LocalStorageImpl
+        // Dependency for HistoryStorageImpl
         single<SharedPreferences> {
-            androidContext().getSharedPreferences(LocalStorageImpl.KEY_SAVED_SEARCH,Context.MODE_PRIVATE)
+            androidContext().getSharedPreferences(HistoryStorageImpl.KEY_SAVED_SEARCH,Context.MODE_PRIVATE)
         }
 
-        // Dependency for LocalStorageImpl
+        // Dependency for HistoryStorageImpl
         single<Gson>{
             Gson()
         }
@@ -62,8 +64,8 @@ class DataModule {
             NetworkClientImpl(get())
         }
 
-        single<LocalStorage>{
-            LocalStorageImpl(get(),get())
+        single<HistoryStorage>{
+            HistoryStorageImpl(get(),get())
         }
 
         //Dependency for FavoriteRepositoryImpl
@@ -76,6 +78,10 @@ class DataModule {
         single{
             Room.databaseBuilder(androidContext(),PlaylistDataBase::class.java, dbPlaylists)
                 .build()
+        }
+        //Dependency for PlaylistRepositoryImpl
+        single<PlaylistStorage>{
+            PlaylistStorageImpl(get())
         }
     }
 
