@@ -63,7 +63,7 @@ class FavoriteRepositoryImpl(private val db: FavoriteDataBase): FavoriteReposito
                 }
 
                 }
-                else{
+                else {
                     null
                 }
             })

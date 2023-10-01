@@ -1,8 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/PlayerConstraintMain"
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        />
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/coordinator_player"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".player.ui.PlayerActivity">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    style="@style/ConstraintMain"
     tools:context=".player.ui.PlayerActivity">
 
 
@@ -31,10 +51,9 @@
         />
 
     <androidx.constraintlayout.widget.Guideline
-        style="@style/PlayerGuideLine"
         android:id="@+id/center_border"
-        app:layout_constraintGuide_percent="0.5"
-        />
+        style="@style/PlayerGuideLine"
+        app:layout_constraintGuide_begin="0dp" />
 
     <Button
         android:id="@+id/back_button_player"
@@ -233,3 +252,45 @@
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone"
+        />
+
+<LinearLayout
+    android:id="@+id/bottom_sheet_playlist"
+    style="@style/BottomSheetLinearLayout"
+    >
+
+<View
+    style="@style/BottomSheetHandle"
+    />
+
+    <TextView
+        style="@style/TitleBottomSheet"
+        android:text="@string/add_to_playlist"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/new_playlist_player"
+        style="@style/ButtonMedium"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"
+        android:text="@string/new_playlist" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_playlist_player"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+</LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</FrameLayout>

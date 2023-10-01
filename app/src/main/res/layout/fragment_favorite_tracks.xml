@@ -7,6 +7,7 @@
     <LinearLayout
         android:id="@+id/no_found_linearLayout"
         style="@style/LinearLayoutSearch"
+        android:visibility="gone"
         tools:visibility="visible">
 
         <ImageView style="@style/NoFoundImageView"

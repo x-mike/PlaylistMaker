@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
 import com.practicum.playlistmaker.favorite.data.db.FavoriteDataBase
+import com.practicum.playlistmaker.playlist.data.db.PlaylistDataBase
 import com.practicum.playlistmaker.search.data.local.LocalStorage
 import com.practicum.playlistmaker.search.data.local.impl.LocalStorageImpl
 import com.practicum.playlistmaker.search.data.network.ItunesApi
@@ -21,6 +22,7 @@ class DataModule {
 
     companion object{
         private val dbFavoriteTracks: String = "dbFavoriteTracks.db"
+        private val dbPlaylists:String = "dbPlaylist.db"
         private val itunesBaseUrl = "https://itunes.apple.com"
     }
 
@@ -70,6 +72,11 @@ class DataModule {
                 .build()
         }
 
+        //Dependency for PlaylistRepositoryImpl
+        single{
+            Room.databaseBuilder(androidContext(),PlaylistDataBase::class.java, dbPlaylists)
+                .build()
+        }
     }
 
 }

@@ -7,6 +7,8 @@ import com.practicum.playlistmaker.favorite.data.impl.FavoriteRepositoryImpl
 import com.practicum.playlistmaker.favorite.domain.FavoriteRepository
 import com.practicum.playlistmaker.player.data.impl.PlayerRepositoryImpl
 import com.practicum.playlistmaker.player.domain.PlayerRepository
+import com.practicum.playlistmaker.playlist.data.impl.PlaylistRepositoryImpl
+import com.practicum.playlistmaker.playlist.domain.PlaylistRepository
 import com.practicum.playlistmaker.search.data.impl.TrackRepositoryImpl
 import com.practicum.playlistmaker.search.domain.TrackRepository
 import com.practicum.playlistmaker.settings.data.impl.SettingsRepositoryImpl
@@ -38,6 +40,10 @@ class RepositoryModule {
 
             single<FavoriteRepository>{
                 FavoriteRepositoryImpl(get())
+            }
+
+            single<PlaylistRepository> {
+                PlaylistRepositoryImpl(get(),get())
             }
 
             // MediaPlayer for PlayerRepositoryImpl

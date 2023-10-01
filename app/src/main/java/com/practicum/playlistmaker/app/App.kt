@@ -1,6 +1,7 @@
 package com.practicum.playlistmaker.app
 
 import android.app.Application
+import com.markodevcic.peko.PermissionRequester
 import com.practicum.playlistmaker.di.DataModule
 import com.practicum.playlistmaker.di.InteractorModule
 import com.practicum.playlistmaker.di.RepositoryModule
@@ -22,5 +23,7 @@ class App : Application() {
                 ViewModelModule().viewModelModule
             )
         }
+
+        PermissionRequester.initialize(applicationContext)
     }
 }

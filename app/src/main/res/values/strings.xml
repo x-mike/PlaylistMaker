@@ -21,10 +21,11 @@
     <string name="button_update">Обновить</string>
     <string name="you_searched">Вы искали</string>
     <string name="button_del_history_search">Очистить историю</string>
-    <string name="button_new_playlist">Новый плейлист</string>
+    <string name="new_playlist">Новый плейлист</string>
     <string name="favorite_tab">Избранные треки</string>
     <string name="playlist_tab">Плейлисты</string>
     <string name="description_poster_player">Poster for track</string>
+    <string name="description_img_playlist">Image for playlist</string>
     <string name="description_placeholder">Placeholder "Not found"</string>
     <string name="description_button_add">Add track in list</string>
     <string name="description_button_play">Play track</string>
@@ -36,5 +37,25 @@
     <string name="description_player_country">Страна</string>
     <string name="start_time">00:00</string>
     <string name="playback_error">Воспроизведение невозможно! Нет такого файла или каталога</string>
+    <string name="create">Создать</string>
+    <string name="hint_name_playlist">Название*</string>
+    <string name="hint_description_playlist">Описание</string>
+    <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="image_not_select">Image not select</string>
+    <string name="permission_denied">Permission to access the storage is denied.</string>
+    <string name="rationale_permission_on_storage">Данное разрешения необходимо для добавления картинки к плейлисту</string>
+    <string name="title_playlist_dialog">Завершить создание плейлиста?</string>
+    <string name="message_playlist_dialog">Все несохраненные данные будут потеряны</string>
+    <string name="cancel_playlist_dialog">Отмена</string>
+    <string name="complete_playlist_dialog">Завершить</string>
+    <string name="message_split_playlist_pOne">Плейлист</string>
+    <string name="message_split_playlist_pTwo">создан</string>
+    <string name="error_add_playlist">Error additing data in database, or commands is not allowed!</string>
+    <string name="error_match_playlist">Error, operation \'match\' impossible!</string>
+    <string name="track_in_playlist">Трек уже добавлен в плейлист</string>
+    <string name="track_add_done">Добавлено в плейлист</string>
+    <string name="option_one_for_one_track">трек</string>
+    <string name="option_two_for_one_track">трека</string>
+    <string name="option_one_for_many_tracks">треков</string>
 
 </resources>
