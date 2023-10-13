@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.playlist.ui
+package com.practicum.playlistmaker.playlist.ui.fragments
 
 import android.Manifest
 import android.content.Intent
@@ -19,6 +19,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -36,15 +37,17 @@ import com.practicum.playlistmaker.databinding.FragmentNewPlaylistBinding
 import com.practicum.playlistmaker.util.ArgsTransfer
 import com.practicum.playlistmaker.main.ui.RootActivity
 import com.practicum.playlistmaker.player.ui.PlayerActivity
-import com.practicum.playlistmaker.playlist.domain.models.StateAddDb
+import com.practicum.playlistmaker.playlist.domain.models.states.StateAddDb
 import com.practicum.playlistmaker.playlist.domain.models.Playlist
+import com.practicum.playlistmaker.playlist.ui.viewModels.NewPlaylistViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NewPlaylistFragment : Fragment() {
+open class NewPlaylistFragment : Fragment() {
 
     companion object {
 
+        const val IMAGE_PL = "IMAGE"
         private var creationWithoutGraph = false
 
         fun newInstance(flagWithoutGraph:Boolean): NewPlaylistFragment {
@@ -55,18 +58,18 @@ class NewPlaylistFragment : Fragment() {
         }
     }
 
-    private val newPlaylistViewModel: NewPlaylistViewModel by viewModel()
+    open val newPlaylistViewModel: NewPlaylistViewModel by viewModel()
 
-    private lateinit var binding: FragmentNewPlaylistBinding
+    open lateinit var binding: FragmentNewPlaylistBinding
 
     private val requester = PermissionRequester.instance()
 
-    private var uriImageTemp: Uri? = null
-    private var playlistNameTemp: String? = null
-    private var descriptionPlaylistTemp: String? = null
+     var uriImageTemp: Uri? = null
+     var playlistNameTemp: String? = null
+     var descriptionPlaylistTemp: String? = null
 
 
-    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) {
 
         if (it != null) {
             val roundCorners = RoundedCorners(requireContext().resources.getDimensionPixelSize(R.dimen.radius_button_low))
@@ -76,7 +79,7 @@ class NewPlaylistFragment : Fragment() {
                 .load(it.toString())
                 .placeholder(R.drawable.add_photo)
                 .apply(options)
-                .into(binding.imagePl)
+                .into(binding.imageNewPl)
 
             uriImageTemp = it
         } else {
@@ -85,7 +88,7 @@ class NewPlaylistFragment : Fragment() {
     }
 
 
-    private fun checkPermission(): Boolean {
+     open fun checkPermission(): Boolean {
         val permissionProvided =
             ContextCompat.checkSelfPermission(requireContext(), getCheckedStorageConst())
 
@@ -127,7 +130,7 @@ class NewPlaylistFragment : Fragment() {
             render(it)
         }
 
-        binding.imagePl.setOnClickListener {
+        binding.imageNewPl.setOnClickListener {
 
             if (!checkPermission()) {
 
@@ -189,21 +192,25 @@ class NewPlaylistFragment : Fragment() {
                  ))
         }
 
-     requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
+        switchOnBackPressedDispatcher(true,dialogExit)
 
-           override fun handleOnBackPressed() {
-               if(uriImageTemp == null &&
-                   (playlistNameTemp == null || playlistNameTemp == "") &&
-                   (descriptionPlaylistTemp == null || descriptionPlaylistTemp == "")){
+    }
 
-                   backStackSelector()
+    open fun switchOnBackPressedDispatcher(switch:Boolean,dialogExit: MaterialAlertDialogBuilder?){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(switch){
 
-               }else {
-                   dialogExit.show()
-               }
-           }
-       })
+            override fun handleOnBackPressed() {
+                if(uriImageTemp == null &&
+                    (playlistNameTemp == null || playlistNameTemp == "") &&
+                    (descriptionPlaylistTemp == null || descriptionPlaylistTemp == "")){
 
+                    backStackSelector()
+
+                }else {
+                    dialogExit?.show()
+                }
+            }
+        })
     }
 
     private fun backStackSelector(){
@@ -215,6 +222,31 @@ class NewPlaylistFragment : Fragment() {
         } else {
             findNavController().popBackStack()
         }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+
+        if(savedInstanceState != null) {
+
+            if(savedInstanceState.getString(IMAGE_PL) != "null") {
+                val roundCorners = RoundedCorners(requireContext().resources.getDimensionPixelSize(R.dimen.radius_button_low))
+                val options = RequestOptions().transform(CenterCrop(),roundCorners)
+
+                Glide.with(this)
+                    .load(savedInstanceState.getString(IMAGE_PL))
+                    .placeholder(R.drawable.add_photo)
+                    .apply(options)
+                    .into(binding.imageNewPl)
+
+                uriImageTemp = savedInstanceState.getString(IMAGE_PL)!!.toUri()
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(IMAGE_PL,uriImageTemp.toString())
     }
 
    override fun onStart() {
@@ -252,7 +284,7 @@ class NewPlaylistFragment : Fragment() {
         }
     }
 
-    private fun render(state:StateAddDb){
+    open fun render(state: StateAddDb){
         when(state){
             is StateAddDb.Error -> {Log.e("ErrorAddPlaylist",R.string.error_add_playlist.toString())}
             is StateAddDb.NoError -> {
@@ -270,7 +302,7 @@ class NewPlaylistFragment : Fragment() {
                     findNavController().popBackStack()
                 }
             }
-            is StateAddDb.Match -> {Log.e("ErrorAddPlaylist", R.string.error_match_playlist.toString())}
+            is StateAddDb.Match -> {Log.e("ErrorAddPlaylist", getString(R.string.error_match_playlist))}
             is StateAddDb.NoData->{
                 //State for Single Live Event, show Toast and other way
             }

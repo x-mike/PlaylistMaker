@@ -1,15 +1,15 @@
-package com.practicum.playlistmaker.playlist.ui
+package com.practicum.playlistmaker.playlist.ui.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
-import com.practicum.playlistmaker.playlist.domain.models.StateAddDb
+import com.practicum.playlistmaker.playlist.domain.models.states.StateAddDb
 import com.practicum.playlistmaker.playlist.domain.models.Playlist
 import kotlinx.coroutines.launch
 
-class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor): ViewModel() {
+open class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor): ViewModel() {
 
     private val stateLiveData = MutableLiveData<StateAddDb>()
     fun getLiveData(): LiveData<StateAddDb> = stateLiveData
@@ -31,10 +31,26 @@ class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor): 
         }
     }
 
+    fun updatePlaylist(
+        idPlaylist: Int,
+        namePlaylist: String?,
+        descriptionPlaylist: String?,
+        imagePlaylist: String?
+    ) {
+        viewModelScope.launch {
+            val result =playlistInteractor.updatePlaylist(
+                idPlaylist,
+                namePlaylist,
+                descriptionPlaylist,
+                imagePlaylist
+            )
 
-   private fun renderState(state:StateAddDb){
+            renderState(result)
+        }
+    }
+
+   private fun renderState(state: StateAddDb){
        stateLiveData.postValue(state)
    }
-
 
 }

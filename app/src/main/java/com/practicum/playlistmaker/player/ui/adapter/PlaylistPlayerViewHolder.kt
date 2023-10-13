@@ -12,6 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.playlist.domain.models.Playlist
+import com.practicum.playlistmaker.util.Formatter
 
 class PlaylistPlayerViewHolder(
     parentView: ViewGroup,
@@ -36,19 +37,7 @@ class PlaylistPlayerViewHolder(
             .into(imagePlaylist)
 
         playlistNameView.text = playlist.playlistName
-        countTracksView.text = formattingTheEnd(playlist.countTracks)
+        countTracksView.text = Formatter.formattingTheEndTracks(playlist.countTracks,itemView.context)
     }
 
-    private fun formattingTheEnd(countTracks: Int): String {
-
-        if (countTracks in 11..14) {
-            return "$countTracks ${itemView.context.getString(R.string.option_one_for_many_tracks)}"
-        }
-
-        return when(countTracks % 10){
-            1 -> "$countTracks ${itemView.context.getString(R.string.option_one_for_one_track)}"
-            2,3,4 ->  "$countTracks ${itemView.context.getString(R.string.option_two_for_one_track)}"
-            else -> "$countTracks ${itemView.context.getString(R.string.option_one_for_many_tracks)}"
-        }
-    }
 }

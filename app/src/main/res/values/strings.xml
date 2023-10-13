@@ -6,6 +6,9 @@
     <string name="settings">Настройки</string>
     <string name="themes">Темная тема</string>
     <string name="app_share">Поделиться приложением</string>
+    <string name="playlist_share">Поделиться</string>
+    <string name="edit_info">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
     <string name="support_write">Написать в поддержку</string>
     <string name="agreement">Пользовательское соглашение</string>
     <string name="pr_ya_android_developer">https://practicum.yandex.ru/android-developer/</string>
@@ -24,12 +27,12 @@
     <string name="new_playlist">Новый плейлист</string>
     <string name="favorite_tab">Избранные треки</string>
     <string name="playlist_tab">Плейлисты</string>
-    <string name="description_poster_player">Poster for track</string>
-    <string name="description_img_playlist">Image for playlist</string>
-    <string name="description_placeholder">Placeholder "Not found"</string>
-    <string name="description_button_add">Add track in list</string>
-    <string name="description_button_play">Play track</string>
-    <string name="description_button_heart">Add track in favorite</string>
+    <string name="description_poster_player">Изображение трека</string>
+    <string name="description_img_playlist">Изображение плейлиста</string>
+    <string name="description_placeholder">Изоборажение-заглушка.</string>
+    <string name="description_button_add">Добавить трек плейлист</string>
+    <string name="description_button_play">Играть</string>
+    <string name="description_button_heart">Добавить трек в любимые</string>
     <string name="description_player_duration">Длительность</string>
     <string name="description_player_alb">Альбом</string>
     <string name="description_player_year">Год</string>
@@ -46,16 +49,31 @@
     <string name="rationale_permission_on_storage">Данное разрешения необходимо для добавления картинки к плейлисту</string>
     <string name="title_playlist_dialog">Завершить создание плейлиста?</string>
     <string name="message_playlist_dialog">Все несохраненные данные будут потеряны</string>
-    <string name="cancel_playlist_dialog">Отмена</string>
+    <string name="cancel_playlist_dialog">Отмена</string>d
     <string name="complete_playlist_dialog">Завершить</string>
     <string name="message_split_playlist_pOne">Плейлист</string>
     <string name="message_split_playlist_pTwo">создан</string>
     <string name="error_add_playlist">Error additing data in database, or commands is not allowed!</string>
     <string name="error_match_playlist">Error, operation \'match\' impossible!</string>
+    <string name="error_init_playlist">Error initialized playlist.Check Db work.</string>
+    <string name="error_query_db">Error query in database.Please check chains methods work correct with database.</string>
     <string name="track_in_playlist">Трек уже добавлен в плейлист</string>
     <string name="track_add_done">Добавлено в плейлист</string>
     <string name="option_one_for_one_track">трек</string>
     <string name="option_two_for_one_track">трека</string>
     <string name="option_one_for_many_tracks">треков</string>
+    <string name="option_one_for_minutes">минута</string>
+    <string name="option_two_for_minutes">минуты</string>
+    <string name="option_three_for_minutes">минут</string>
+    <string name="no_tracks">В плейлисте нет треков</string>
+    <string name="message_about_delete_track">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="message_about_delete_playlist">Вы уверены, что хотите удалить этот плейлист?</string>
+    <string name="title_del_track_dialog">Удалить трек</string>
+    <string name="title_del_playlist_dialog">Удалить плейлист</string>
+    <string name="positive_playlist_dialog">Удалить</string>
+    <string name="message_no_tracks_in_playlist">В этом плейлисте нет списка треков, которым можно поделиться</string>
+    <string name="edit">Редактировать</string>
+    <string name="save">Сохранить</string>
+
 
 </resources>

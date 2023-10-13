@@ -29,7 +29,7 @@ class PlaylistStorageImpl(private val context: Context): PlaylistStorage {
             }
 
             val timeStamp =
-                SimpleDateFormat("dd.MM.yyyy_hh:mm", Locale.getDefault()).format(Date().time)
+                SimpleDateFormat("dd.MM.yyyy_hh:mm:ss", Locale.getDefault()).format(Date().time)
             val file = File(filePath, "cover-$timeStamp")
 
             val inputStream = context.contentResolver.openInputStream(uriFile.toUri())

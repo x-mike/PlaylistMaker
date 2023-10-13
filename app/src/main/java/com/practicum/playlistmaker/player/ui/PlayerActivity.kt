@@ -21,12 +21,13 @@ import com.practicum.playlistmaker.player.ui.adapter.PlaylistPlayerAdapter
 import com.practicum.playlistmaker.player.ui.model.TrackPlr
 import com.practicum.playlistmaker.player.ui.states.PlayerStateFavorite
 import com.practicum.playlistmaker.player.ui.states.PlayerStateRender
-import com.practicum.playlistmaker.player.ui.states.PlayerToastState
-import com.practicum.playlistmaker.playlist.domain.models.EmptyStatePlaylist
+import com.practicum.playlistmaker.player.ui.states.ToastState
+import com.practicum.playlistmaker.playlist.domain.models.states.EmptyStatePlaylist
 import com.practicum.playlistmaker.playlist.domain.models.Playlist
-import com.practicum.playlistmaker.playlist.domain.models.StateAddDb
-import com.practicum.playlistmaker.playlist.ui.NewPlaylistFragment
+import com.practicum.playlistmaker.playlist.domain.models.states.StateAddDb
+import com.practicum.playlistmaker.playlist.ui.fragments.NewPlaylistFragment
 import com.practicum.playlistmaker.util.ArgsTransfer
+import com.practicum.playlistmaker.util.Formatter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -71,7 +72,7 @@ class PlayerActivity : AppCompatActivity(), ArgsTransfer {
         }
 
         viewModel.getToastStateLiveData().observe(this){
-            if(it is PlayerToastState.ShowMessage){
+            if(it is ToastState.ShowMessage){
                 showMessage(it.message)
                 viewModel.setStateToastNone()
             }
@@ -126,8 +127,7 @@ class PlayerActivity : AppCompatActivity(), ArgsTransfer {
 
         binding.trackName.text = dataTrack.trackName.orEmpty()
         binding.artistName.text = dataTrack.artistName.orEmpty()
-        binding.timeTrack.text = SimpleDateFormat("mm:ss", Locale.getDefault())
-            .format(dataTrack.trackTimeMillis).orEmpty()
+        binding.timeTrack.text = Formatter.dateFormatting(dataTrack.trackTimeMillis)
 
         binding.currentAlbum.text = dataTrack.collectionName.orEmpty()
 

@@ -10,8 +10,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.models.Track
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.practicum.playlistmaker.util.Formatter
+
 
 class TracksViewHolder(
     parentView: ViewGroup,
@@ -27,8 +27,7 @@ class TracksViewHolder(
     fun bind(trackData: Track) {
         trackNameView.text = trackData.trackName
         artistNameView.text = trackData.artistName
-        trackTimeView.text = SimpleDateFormat("mm:ss", Locale.getDefault())
-            .format(trackData.trackTimeMillis)
+        trackTimeView.text = Formatter.dateFormatting(trackData.trackTimeMillis)
 
         Glide.with(itemView)
             .load(trackData.artworkUrl100)

@@ -2,12 +2,12 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/ConstraintMain"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/ConstraintMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".playlist.ui.NewPlaylistFragment"
+    tools:context=".playlist.ui.fragments.NewPlaylistFragment"
     >
 
     <Button
@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/title_new_playlist"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/image_pl"
+        app:layout_constraintBottom_toTopOf="@+id/image_new_pl"
         />
 
     <TextView
@@ -50,7 +50,7 @@
 
     <ImageView
         style="@style/ImagePlaylist"
-        android:id="@+id/image_pl"
+        android:id="@+id/image_new_pl"
         android:contentDescription="@string/description_img_playlist"
         app:layout_constraintDimensionRatio="H,1:1"
         app:layout_constraintEnd_toEndOf="@id/right_border_pl_24"
@@ -63,7 +63,7 @@
         style="@style/InputLayoutPlaylist"
         android:id="@+id/text_input_pl_name"
         android:layout_marginTop="@dimen/item_marginBottom_medium"
-        app:layout_constraintTop_toBottomOf="@id/image_pl"
+        app:layout_constraintTop_toBottomOf="@id/image_new_pl"
         app:layout_constraintStart_toStartOf="@id/left_border_pl_16"
         app:layout_constraintEnd_toEndOf="@id/right_border_pl_16"
         app:layout_constraintBottom_toTopOf="@id/text_input_pl_desc"
@@ -113,6 +113,5 @@
         app:layout_constraintStart_toStartOf="@id/left_border_pl_16"
         app:layout_constraintEnd_toEndOf="@id/right_border_pl_16"
         />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

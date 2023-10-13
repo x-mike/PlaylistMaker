@@ -16,9 +16,9 @@ class RootActivity : AppCompatActivity(), ArgsTransfer {
         const val BUNDLE_ARGS = "args"
     }
 
-   private var bundleArgs: Bundle? = null
+    private var bundleArgs: Bundle? = null
 
-   private lateinit var binding: ActivityRootBinding
+    private lateinit var binding: ActivityRootBinding
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,16 +33,21 @@ class RootActivity : AppCompatActivity(), ArgsTransfer {
 
         binding.bottomNavView.setupWithNavController(navController)
 
-        navController.addOnDestinationChangedListener{_,destination,_->
-            when(destination.id){
-                R.id.newPlaylistFragment -> {binding.bottomNavView.isVisible=false}
-                else -> {binding.bottomNavView.isVisible = true}
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.newPlaylistFragment, R.id.playlistTracksFragment, R.id.updatePlaylistFragment -> {
+                    binding.bottomNavView.isVisible = false
+                }
+
+                else -> {
+                    binding.bottomNavView.isVisible = true
+                }
             }
         }
     }
 
     override fun postArgs(args: Bundle?) {
-     bundleArgs = args
+        bundleArgs = args
     }
 
     override fun getArgs(): Bundle? {
