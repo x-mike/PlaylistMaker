@@ -8,6 +8,9 @@ import com.practicum.playlistmaker.favorite.domain.FavoriteInteractor
 import com.practicum.playlistmaker.player.domain.PlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.model.TrackPlr
+import com.practicum.playlistmaker.player.ui.states.PlayerStateFavorite
+import com.practicum.playlistmaker.player.ui.states.PlayerStateRender
+import com.practicum.playlistmaker.player.ui.states.PlayerToastState
 import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
 import com.practicum.playlistmaker.playlist.domain.models.EmptyStatePlaylist
 import com.practicum.playlistmaker.playlist.domain.models.StateAddDb
@@ -39,6 +42,9 @@ class PlayerViewModel(
 
     private val addPlaylistLivaData = MutableLiveData<StateAddDb>()
     fun getAddPlaylistLivaData(): LiveData<StateAddDb> = addPlaylistLivaData
+
+    private val toastStateLivaData = MutableLiveData<PlayerToastState>()
+    fun getToastStateLiveData():LiveData<PlayerToastState> = toastStateLivaData
 
     private var timerJob: Job? = null
 
@@ -150,6 +156,7 @@ class PlayerViewModel(
                     is StateAddDb.Error -> renderAddTrackState(StateAddDb.Error())
                     is StateAddDb.NoError -> renderAddTrackState(StateAddDb.NoError(playlist.playlistName))
                     is StateAddDb.Match -> renderAddTrackState(StateAddDb.Error())
+                    is StateAddDb.NoData -> renderAddTrackState(StateAddDb.NoData())
                 }
             } else {
 
@@ -164,10 +171,27 @@ class PlayerViewModel(
                         is StateAddDb.Error -> renderAddTrackState(StateAddDb.Error())
                         is StateAddDb.NoError -> renderAddTrackState(StateAddDb.NoError(playlist.playlistName))
                         is StateAddDb.Match -> renderAddTrackState(StateAddDb.Error())
+                        is StateAddDb.NoData -> renderAddTrackState(StateAddDb.NoData())
                     }
                 }
             }
         }
+    }
+
+    fun setStateNoDataPlaylistLivaData(){
+        renderAddTrackState(StateAddDb.NoData())
+    }
+
+    fun showToast(message:String){
+        renderToast(message)
+    }
+
+    fun setStateToastNone(){
+        toastStateLivaData.postValue(PlayerToastState.NoneMessage)
+    }
+
+    private fun renderToast(message: String){
+        toastStateLivaData.postValue(PlayerToastState.ShowMessage(message))
     }
 
     private fun renderState(state: PlayerStateRender) {

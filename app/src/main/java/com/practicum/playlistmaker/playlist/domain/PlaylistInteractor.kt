@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlaylistInteractor {
 
+    fun getSavedImageFromPrivateStorage (uriFile: String?): String?
+
     suspend fun addPlaylist(playlist: Playlist):StateAddDb
 
     suspend fun addTrackInPlaylist(track: Track, idPlaylist:Int):StateAddDb

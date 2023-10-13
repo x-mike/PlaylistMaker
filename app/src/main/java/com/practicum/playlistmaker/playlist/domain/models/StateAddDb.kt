@@ -8,4 +8,6 @@ sealed class StateAddDb {
 
     class Match(val namePlaylist: String? = null):StateAddDb()
 
+    class NoData:StateAddDb()
+
 }

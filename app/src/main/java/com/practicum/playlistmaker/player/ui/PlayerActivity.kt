@@ -19,6 +19,9 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.ui.adapter.PlaylistPlayerAdapter
 import com.practicum.playlistmaker.player.ui.model.TrackPlr
+import com.practicum.playlistmaker.player.ui.states.PlayerStateFavorite
+import com.practicum.playlistmaker.player.ui.states.PlayerStateRender
+import com.practicum.playlistmaker.player.ui.states.PlayerToastState
 import com.practicum.playlistmaker.playlist.domain.models.EmptyStatePlaylist
 import com.practicum.playlistmaker.playlist.domain.models.Playlist
 import com.practicum.playlistmaker.playlist.domain.models.StateAddDb
@@ -65,6 +68,13 @@ class PlayerActivity : AppCompatActivity(), ArgsTransfer {
 
         viewModel.getAddPlaylistLivaData().observe(this) {
             renderAddTrackInPlaylist(it)
+        }
+
+        viewModel.getToastStateLiveData().observe(this){
+            if(it is PlayerToastState.ShowMessage){
+                showMessage(it.message)
+                viewModel.setStateToastNone()
+            }
         }
 
         initializingTrackData()
@@ -258,23 +268,20 @@ class PlayerActivity : AppCompatActivity(), ArgsTransfer {
     private fun renderAddTrackInPlaylist(state: StateAddDb) {
         when (state) {
             is StateAddDb.Match -> {
-                Toast.makeText(
-                    this,
-                    "${getString(R.string.track_in_playlist)} ${state.namePlaylist}",
-                    Toast.LENGTH_LONG
-                ).show()
+                viewModel.showToast("${getString(R.string.track_in_playlist)} ${state.namePlaylist}")
+                viewModel.setStateNoDataPlaylistLivaData()
             }
             is StateAddDb.Error -> {
                 Log.e("ErrorAddBd", getString(R.string.error_add_playlist))
             }
             is StateAddDb.NoError -> {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                Toast.makeText(
-                    this,
-                    "${getString(R.string.track_add_done)} ${state.namePlaylist}",
-                    Toast.LENGTH_LONG
-                ).show()
+                viewModel.showToast("${getString(R.string.track_add_done)} ${state.namePlaylist}")
+                viewModel.setStateNoDataPlaylistLivaData()
             }
+            is StateAddDb.NoData ->{
+                //State for Single Live Event, show Toast and other way
+             }
         }
     }
 
@@ -301,4 +308,11 @@ class PlayerActivity : AppCompatActivity(), ArgsTransfer {
             postArgs(null)
         }
 }
+    private fun showMessage(message:String){
+        Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_LONG
+        ).show()
+    }
 }

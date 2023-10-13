@@ -180,9 +180,10 @@
         style="@style/CurrentDescriptionTrackPlayer"
         android:id="@+id/current_album"
         android:layout_marginTop="@dimen/margin_top_low"
+        android:layout_marginStart="@dimen/item_marginStart_veryLow"
         app:layout_constraintBaseline_toBaselineOf="@id/album"
         app:layout_constraintTop_toBottomOf="@id/time_track"
-        app:layout_constraintStart_toEndOf="@id/center_border"
+        app:layout_constraintStart_toEndOf="@id/album"
         app:layout_constraintEnd_toEndOf="@id/right_border_16"
         tools:text="Yesterday (Remastered 2009)"
         />

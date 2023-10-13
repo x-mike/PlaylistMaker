@@ -1,13 +1,13 @@
-package com.practicum.playlistmaker.search.data.local.impl
+package com.practicum.playlistmaker.search.data.storage.impl
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.practicum.playlistmaker.search.data.dto.TrackDto
-import com.practicum.playlistmaker.search.data.local.LocalStorage
+import com.practicum.playlistmaker.search.data.storage.HistoryStorage
 
-class LocalStorageImpl (private val sharedPref: SharedPreferences,
-                        private val gson: Gson) : LocalStorage {
+class HistoryStorageImpl (private val sharedPref: SharedPreferences,
+                          private val gson: Gson) : HistoryStorage {
 
     companion object {
         const val KEY_SAVED_SEARCH = "key_saved_search"

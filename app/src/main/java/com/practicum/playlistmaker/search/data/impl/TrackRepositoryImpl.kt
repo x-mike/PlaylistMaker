@@ -2,7 +2,7 @@ package com.practicum.playlistmaker.search.data.impl
 
 import com.practicum.playlistmaker.favorite.data.db.FavoriteDataBase
 import com.practicum.playlistmaker.search.data.dto.TrackDto
-import com.practicum.playlistmaker.search.data.local.LocalStorage
+import com.practicum.playlistmaker.search.data.storage.HistoryStorage
 import com.practicum.playlistmaker.search.data.network.NetworkClient
 import com.practicum.playlistmaker.search.data.dto.ListTracksResponse
 import com.practicum.playlistmaker.search.data.dto.TrackSearchRequest
@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 
 class TrackRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val localStorage: LocalStorage,
+    private val historyStorage: HistoryStorage,
     private val database: FavoriteDataBase
 ) : TrackRepository {
 
@@ -71,7 +71,7 @@ class TrackRepositoryImpl(
         trackDto.releaseDate = track.releaseDate
 
 
-        val tempListTracks: ArrayList<TrackDto> = localStorage.getSavedHistorySearch()
+        val tempListTracks: ArrayList<TrackDto> = historyStorage.getSavedHistorySearch()
 
         //Search for matches in the list
         tempListTracks.forEachIndexed { index, track ->
@@ -90,15 +90,15 @@ class TrackRepositoryImpl(
 
         //The logic of selecting the first ten tracks
         if (tempListTracks.size <= 10) {
-            localStorage.addTrackListInHistory(tempListTracks)
+            historyStorage.addTrackListInHistory(tempListTracks)
 
         } else {
-            localStorage.addTrackListInHistory(tempListTracks.dropLast(tempListTracks.size - 10) as ArrayList<TrackDto>)
+            historyStorage.addTrackListInHistory(tempListTracks.dropLast(tempListTracks.size - 10) as ArrayList<TrackDto>)
         }
     }
 
     override fun getHistorySearch(): List<Track> {
-        return localStorage.getSavedHistorySearch().map {
+        return historyStorage.getSavedHistorySearch().map {
             Track(
                 it.trackId,
                 it.isFavorite,
@@ -116,7 +116,7 @@ class TrackRepositoryImpl(
     }
 
     override fun clearHistorySearch() {
-        localStorage.clearHistorySearch()
+        historyStorage.clearHistorySearch()
     }
 
     override suspend fun getIdTracks():List<Long>?{

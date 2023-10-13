@@ -49,4 +49,8 @@ class PlaylistInteractorImpl(private val repository: PlaylistRepository) : Playl
             }
          }
      }
+
+    override fun getSavedImageFromPrivateStorage(uriFile: String?): String? {
+        return repository.getSavedImageFromPrivateStorage(uriFile)
+    }
 }
