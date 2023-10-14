@@ -88,23 +88,22 @@ class PlaylistTracksFragment : Fragment() {
 
          initCallbacks()
 
-        bottomSheetTracks.setPeekHeight(getMetricsDisplayForPeekHight())
-
         playlistTracksAdapter =
             PlaylistTracksAdapter(arrayTracks, { lifecycleScope }, listenerClickOnTracks)
         binding.recyclerPlaylistTracks.adapter = playlistTracksAdapter
         binding.recyclerPlaylistTracks.layoutManager = LinearLayoutManager(requireContext())
 
+
+        binding.sharePl.post(Runnable {
+            val shareButtonLocation = IntArray(2)
+            binding.sharePl.getLocationOnScreen(shareButtonLocation)
+            bottomSheetTracks.setPeekHeight(binding.root.height - shareButtonLocation[1]- resources.getDimensionPixelSize(R.dimen.item_marginTop_high))
+        })
+
         playlistTracksViewModel.getPlaylist(idPlaylist!!)
 
     }
 
-    private fun getMetricsDisplayForPeekHight():Int{
-        if(resources.configuration.fontScale>1.0){
-            return requireActivity().windowManager.defaultDisplay.height*20/100
-        }
-        else{return requireActivity().windowManager.defaultDisplay.height*30/100}
-    }
 
     private fun delTrackFromPlaylistWithDialog(): MaterialAlertDialogBuilder{
         val dialogDelete = MaterialAlertDialogBuilder(requireContext())
