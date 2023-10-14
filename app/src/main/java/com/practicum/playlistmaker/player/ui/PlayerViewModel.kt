@@ -10,16 +10,16 @@ import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.model.TrackPlr
 import com.practicum.playlistmaker.player.ui.states.PlayerStateFavorite
 import com.practicum.playlistmaker.player.ui.states.PlayerStateRender
-import com.practicum.playlistmaker.player.ui.states.PlayerToastState
+import com.practicum.playlistmaker.player.ui.states.ToastState
 import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
-import com.practicum.playlistmaker.playlist.domain.models.EmptyStatePlaylist
-import com.practicum.playlistmaker.playlist.domain.models.StateAddDb
+import com.practicum.playlistmaker.playlist.domain.models.states.EmptyStatePlaylist
+import com.practicum.playlistmaker.playlist.domain.models.states.StateAddDb
 import com.practicum.playlistmaker.playlist.domain.models.Playlist
+import com.practicum.playlistmaker.util.Formatter
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Locale
+
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
@@ -43,8 +43,8 @@ class PlayerViewModel(
     private val addPlaylistLivaData = MutableLiveData<StateAddDb>()
     fun getAddPlaylistLivaData(): LiveData<StateAddDb> = addPlaylistLivaData
 
-    private val toastStateLivaData = MutableLiveData<PlayerToastState>()
-    fun getToastStateLiveData():LiveData<PlayerToastState> = toastStateLivaData
+    private val toastStateLivaData = MutableLiveData<ToastState>()
+    fun getToastStateLiveData():LiveData<ToastState> = toastStateLivaData
 
     private var timerJob: Job? = null
 
@@ -88,8 +88,7 @@ class PlayerViewModel(
     }
 
     fun getDateFormat(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault())
-            .format(playerInteractor.getCurrentPositionPlayer())
+        return Formatter.dateFormatting(playerInteractor.getCurrentPositionPlayer())
     }
 
     private fun startTimer() {
@@ -187,11 +186,11 @@ class PlayerViewModel(
     }
 
     fun setStateToastNone(){
-        toastStateLivaData.postValue(PlayerToastState.NoneMessage)
+        toastStateLivaData.postValue(ToastState.NoneMessage)
     }
 
     private fun renderToast(message: String){
-        toastStateLivaData.postValue(PlayerToastState.ShowMessage(message))
+        toastStateLivaData.postValue(ToastState.ShowMessage(message))
     }
 
     private fun renderState(state: PlayerStateRender) {

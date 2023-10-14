@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/MenuLinearLayout">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/new_playlist"
+        style="@style/ButtonMedium"
+        android:layout_gravity="center"
+        android:layout_marginBottom="0dp"
+        android:text="@string/new_playlist" />
+
+    <LinearLayout
+        android:id="@+id/no_found_linearLayout_pl"
+        style="@style/LinearLayoutSearch"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+
+        <ImageView
+            style="@style/NoFoundImageView"
+            android:layout_marginTop="@dimen/item_marginTop_plhPlaylist"
+            />
+
+        <TextView
+            style="@style/PlaceholderTextMediaEmpty"
+            android:text="@string/playlist_empty" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_playlists"
+        android:paddingStart="@dimen/padding_lowly"
+        android:paddingEnd="@dimen/padding_lowly"
+        android:layout_marginTop="@dimen/marginTop_recycler_history_search"
+        style="@style/TracksRecycler"
+        />
+
+
+</androidx.appcompat.widget.LinearLayoutCompat>

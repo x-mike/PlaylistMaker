@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.playlist.data.impl
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import android.annotation.SuppressLint
 import com.practicum.playlistmaker.playlist.data.db.PlaylistDataBase
 import com.practicum.playlistmaker.playlist.data.db.models.PlaylistEntity
 import com.practicum.playlistmaker.playlist.data.db.models.TrackEntityInPlaylist
@@ -9,6 +8,7 @@ import com.practicum.playlistmaker.playlist.data.storage.PlaylistStorage
 import com.practicum.playlistmaker.playlist.domain.PlaylistRepository
 import com.practicum.playlistmaker.playlist.domain.models.Playlist
 import com.practicum.playlistmaker.search.domain.models.Track
+import com.practicum.playlistmaker.util.Mapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,7 +16,6 @@ import kotlinx.coroutines.withContext
 
 class PlaylistRepositoryImpl(
     private val database: PlaylistDataBase,
-    private val gson: Gson,
     private val storage: PlaylistStorage
 ) : PlaylistRepository {
 
@@ -24,23 +23,16 @@ class PlaylistRepositoryImpl(
         private const val ONE_TRACK = 1
     }
 
-    override suspend fun addPlaylist(playlist: Playlist, onAddPlaylistCallback: (Boolean) -> Unit) {
-        withContext(Dispatchers.IO) {
-
+    override suspend fun addPlaylist(playlist: Playlist):Boolean {
+        return withContext(Dispatchers.IO) {
             try {
-
                 database.getPlaylistDao().insertPlaylist(
-                    PlaylistEntity(
-                        playlistName = playlist.playlistName,
-                        descriptionPlaylist = playlist.descriptionPlaylist,
-                        imageInStorage = playlist.imageInStorage
-                    )
+                Mapper.getPlaylistEntityFromPlaylist(playlist)
                 )
-                onAddPlaylistCallback(true)
+                false
             } catch (exp: Throwable) {
-                onAddPlaylistCallback(false)
+                true
             }
-
         }
     }
 
@@ -50,18 +42,7 @@ class PlaylistRepositoryImpl(
                 val playlists = database.getPlaylistDao().getAllPlaylists()
 
                 if (playlists != null) {
-
-                    playlists.map {
-                        Playlist(
-                            id = it.id,
-                            playlistName = it.playlistName,
-                            descriptionPlaylist = it.descriptionPlaylist,
-                            imageInStorage = it.imageInStorage,
-                            tracksInPlaylist = takeFromJson(it.tracksInPlaylist),
-                            countTracks = it.countTracks
-                        )
-                    }
-
+                 Mapper.getArrayPlaylistFromPlaylistEntity(playlists)
                 } else {
                     null
                 }
@@ -70,61 +51,45 @@ class PlaylistRepositoryImpl(
     }
 
     override suspend fun addTrackInPlaylist(
-        track: Track,
-        idPlaylist: Int,
-        onAddTrackCallback: (Boolean) -> Unit
-    ) {
-
-        withContext(Dispatchers.IO) {
-
+        track:Track,
+        idPlaylist:Int
+    ): Boolean {
+        return withContext(Dispatchers.IO) {
             try {
                 insertTrackInCommonTable(track)
                 insertTrackInPlaylist(track, idPlaylist)
 
-                onAddTrackCallback(true)
-
+                false
             } catch (exp: Throwable) {
-                onAddTrackCallback(false)
+                true
             }
         }
     }
 
-    private fun takeFromJson(jsonString: String?): ArrayList<Long> {
+    private suspend fun removeTrackFromCommonTable(idTrack: Long){
+        val allPlaylists = database.getPlaylistDao().getAllPlaylists()
 
-        if (jsonString != null) {
-            val itemType = object : TypeToken<ArrayList<Long>>() {}.type
+        allPlaylists!!.map {
+            val listId = Mapper.takeFromJson(it.tracksInPlaylist)
 
-            return gson.fromJson(jsonString, itemType)
+            if(listId.contains(idTrack)){
+                return
+            }
         }
-        return ArrayList<Long>()
-    }
 
-    private fun toJsonFromArray(listId: ArrayList<Long>): String {
-        return gson.toJson(listId)
+        database.getPlaylistDao().deleteTrackInCommonTable(idTrack)
     }
 
     private suspend fun insertTrackInCommonTable(track: Track) {
 
         database.getPlaylistDao().insertTrackInCommonTable(
-            TrackEntityInPlaylist(
-                trackId = track.trackId,
-                isFavorite = track.isFavorite,
-                trackName = track.trackName,
-                artistName = track.artistName,
-                trackTimeMillis = track.trackTimeMillis,
-                artworkUrl100 = track.artworkUrl100,
-                collectionName = track.collectionName,
-                releaseDate = track.releaseDate,
-                primaryGenreName = track.primaryGenreName,
-                country = track.country,
-                previewUrl = track.previewUrl
-            )
+          Mapper.getTrackEntityFromTrack(track)
         )
     }
 
     private suspend fun insertTrackInPlaylist(track: Track, idPlaylist: Int) {
         val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
-        val listId = takeFromJson(playlist.tracksInPlaylist)
+        val listId = Mapper.takeFromJson(playlist.tracksInPlaylist)
 
         listId.add(track.trackId!!)
 
@@ -133,7 +98,7 @@ class PlaylistRepositoryImpl(
             playlistName = playlist.playlistName,
             descriptionPlaylist = playlist.descriptionPlaylist,
             imageInStorage = playlist.imageInStorage,
-            tracksInPlaylist = toJsonFromArray(listId),
+            tracksInPlaylist = Mapper.toJsonFromArray(listId),
             countTracks = playlist.countTracks + ONE_TRACK
 
         )
@@ -141,8 +106,132 @@ class PlaylistRepositoryImpl(
         database.getPlaylistDao().updatePlaylist(newModifiedPlaylist)
     }
 
+    private suspend fun removeTrackFromPlDb(idPlaylist: Int,idTrack: Long){
+        val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
+        val listId = Mapper.takeFromJson(playlist.tracksInPlaylist)
+
+        listId.remove(idTrack)
+
+        val newModifiedPlaylist = PlaylistEntity(
+            id = playlist.id,
+            playlistName = playlist.playlistName,
+            descriptionPlaylist = playlist.descriptionPlaylist,
+            imageInStorage = playlist.imageInStorage,
+            tracksInPlaylist = Mapper.toJsonFromArray(listId),
+            countTracks = playlist.countTracks - ONE_TRACK
+        )
+
+        database.getPlaylistDao().insertPlaylist(newModifiedPlaylist)
+    }
+
+//StN
+    override suspend fun getTracksFromCommonTable(listIdTracks:ArrayList<Long>):Flow<List<Track>?>{
+
+        return flow {
+        emit(withContext(Dispatchers.IO) {
+
+            if(listIdTracks.isEmpty()){
+                null
+            } else {
+            val tracksList:ArrayList<TrackEntityInPlaylist> = arrayListOf()
+
+            for (i in 0 until listIdTracks.size) {
+
+               val track: TrackEntityInPlaylist = database.getPlaylistDao().getTrackFromCommonTable(listIdTracks[i])
+
+              tracksList.add(track)
+            }
+           Mapper.getArrayTrackFromTrackEntityPlaylist(tracksList)
+        }
+        })
+       }
+      }
+
+
+    override suspend fun deleteTrackFromPlaylist(
+        idPlaylist: Int,
+        idTrack:Long): Flow<List<Track>?>?
+     {
+        try {
+            removeTrackFromPlDb(idPlaylist,idTrack)
+            removeTrackFromCommonTable(idTrack)
+
+            val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
+            val listId = Mapper.takeFromJson(playlist.tracksInPlaylist)
+
+            return if(listId.isEmpty()){
+                flow{emit(ArrayList<Track>())}
+            } else{
+                getTracksFromCommonTable(listId)
+            }
+        }catch(exp:Throwable){
+            return null
+        }
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    override suspend fun deletePlaylist(idPlaylist: Int): Flow<Unit?> {
+        try {
+        val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
+        val listId = Mapper.takeFromJson(playlist.tracksInPlaylist)
+            if(listId.isEmpty()) {
+                database.getPlaylistDao().deletePlaylist(idPlaylist)
+                       return flow {emit(Unit)}
+            }else{
+                database.getPlaylistDao().deletePlaylist(idPlaylist)
+                for (i in 0 until listId.size ){
+                    removeTrackFromCommonTable(listId[i])
+                }
+                      return  flow {emit(Unit)}
+            }
+
+    }catch (ext:Throwable){
+           return flow{ emit(null) }
+    }
+    }
+
+    override suspend fun getPlaylist(idPlaylist: Int): Flow<Playlist?> {
+        try {
+            val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
+
+            return flow { emit(
+               Mapper.getPlaylistFromPlaylistEntity(playlist)
+            ) }
+
+        }
+        catch (exp:Throwable){
+            return flow { emit(null) }
+        }
+    }
+
+    override suspend fun updatePlaylist(
+        idPlaylist: Int,
+        namePlaylist: String?,
+        descriptionPlaylist: String?,
+        imagePlaylist: String?
+    ): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val playlist = database.getPlaylistDao().getPlaylist(idPlaylist)
+                database.getPlaylistDao().updatePlaylist(
+                    PlaylistEntity(
+                        id = idPlaylist,
+                        playlistName = namePlaylist,
+                        descriptionPlaylist = descriptionPlaylist,
+                        imageInStorage = getSavedImageFromPrivateStorage(imagePlaylist),
+                        tracksInPlaylist = playlist.tracksInPlaylist,
+                        countTracks = playlist.countTracks
+                    )
+                )
+                 false
+
+            } catch (exp: Throwable) {
+                 true
+            }
+        }
+    }
+
     override fun getSavedImageFromPrivateStorage(uriFile: String?): String? {
         return  storage.getSavedImageFromPrivateStorage(uriFile)
     }
-
 }

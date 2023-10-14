@@ -1,14 +1,14 @@
-package com.practicum.playlistmaker.playlist.ui
+package com.practicum.playlistmaker.playlist.ui.viewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.playlist.domain.PlaylistInteractor
-import com.practicum.playlistmaker.playlist.domain.models.EmptyStatePlaylist
+import com.practicum.playlistmaker.playlist.domain.models.states.EmptyStatePlaylist
 import kotlinx.coroutines.launch
 
-class PlaylistTracksViewModel(private val playlistInteractor: PlaylistInteractor): ViewModel() {
+class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor): ViewModel() {
 
     private val emptyStateLiveData = MutableLiveData<EmptyStatePlaylist>()
     fun getEmptyStateLiveData() : LiveData<EmptyStatePlaylist> = emptyStateLiveData
@@ -24,7 +24,7 @@ class PlaylistTracksViewModel(private val playlistInteractor: PlaylistInteractor
         }
     }
 
-    private fun renderState(state:EmptyStatePlaylist){
+    private fun renderState(state: EmptyStatePlaylist){
         emptyStateLiveData.postValue(state)
     }
 }
